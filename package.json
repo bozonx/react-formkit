@@ -1,0 +1,35 @@
+{
+  "name": "react-fromkit",
+  "version": "0.0.0",
+  "description": "React connector to formkit.",
+  "private": true,
+  "license": "MIT",
+  "repository": "git@github.com:bozonx/react-formkit.git",
+  "engines": {
+    "node": ">=5.11.1"
+  },
+  "author": "Ivan Kozyrin <ipkozyrin@gmail.com>",
+  "scripts": {
+    "test": "yarn run test-web",
+    "test-web": "node_modules/.bin/jest --config=jest-web.json",
+    "snapshot": "node_modules/.bin/jest --config=jest-web.json -u $1"
+  },
+  "dependencies": {
+    "babel-core": "^6.24.1",
+    "babel-loader": "^6.4.1",
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-plugin-transform-decorators-legacy": "^1.3.4",
+    "babel-plugin-transform-runtime": "^6.23.0",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-react": "^6.24.1",
+    "babel-preset-stage-0": "^6.24.1",
+    "babel-register": "^6.24.1",
+    "babel-runtime": "^6.23.0",
+    "lodash": "^4.17.4",
+    "prop-types": "^15.5.8",
+    "react": "16.0.0-alpha.6",
+    "react-dom": "^15.5.4"
+  },
+  "devDependencies": {
+  }
+}
