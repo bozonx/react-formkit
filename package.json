@@ -9,15 +9,20 @@
     "node": ">=5.11.1"
   },
   "author": "Ivan Kozyrin <ipkozyrin@gmail.com>",
+  "main": "dist/react-formkit",
   "scripts": {
     "test": "yarn run test-web",
     "test-web": "node_modules/.bin/jest --config=jest-web.json",
-    "snapshot": "node_modules/.bin/jest --config=jest-web.json -u $1"
+    "snapshot": "node_modules/.bin/jest --config=jest-web.json -u $1",
+    "build": "yarn test && yarn run build-node && yarn run build-web && yarn run build-web-min",
+    "build-node": "NODE_ENV=production node_modules/.bin/webpack --progress --config ./webpack.node.config.js",
+    "build-web": "NODE_ENV=production node_modules/.bin/webpack --progress --config ./webpack.web.config.js",
+    "build-web-min": "NODE_ENV=production node_modules/.bin/webpack -p --progress --config ./webpack.web-min.config.js"
   },
   "dependencies": {
     "babel": "^6.23.0",
     "babel-core": "^6.24.1",
-    "babel-loader": "^6.4.1",
+    "babel-loader": "^7.0.0",
     "babel-plugin-transform-class-properties": "^6.24.1",
     "babel-plugin-transform-decorators-legacy": "^1.3.4",
     "babel-plugin-transform-runtime": "^6.23.0",
@@ -32,5 +37,8 @@
     "react": "16.0.0-alpha.6",
     "react-dom": "^15.5.4"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "webpack": "^2.6.1",
+    "webpack-merge": "^4.1.0"
+  }
 }

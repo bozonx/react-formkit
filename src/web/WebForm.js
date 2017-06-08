@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import _ from 'lodash';
+//import _ from 'lodash';
 
 
-export default class Form extends React.Component {
+export default class WebForm extends React.Component {
   static propTypes = {
     children: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
     onSubmit: PropTypes.func,
