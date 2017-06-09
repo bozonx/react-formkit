@@ -738,8 +738,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 var React = __webpack_require__(88);
 
-console.log(222222222222, React);
-
 var WebForm = function (_React$Component) {
   __WEBPACK_IMPORTED_MODULE_4_babel_runtime_helpers_inherits___default()(WebForm, _React$Component);
 
@@ -802,18 +800,11 @@ var WebForm = function (_React$Component) {
 /* 42 */
 /***/ (function(module, exports, __webpack_require__) {
 
-//import WebForm from './web/WebForm';
 var WebForm = __webpack_require__(41).default;
-//const WebForm
 
 module.exports = {
   WebForm: WebForm
 };
-
-// export default {
-//   aa: 11222,
-//   WebForm,
-// }
 
 /***/ }),
 /* 43 */
@@ -1715,7 +1706,7 @@ for(var collections = ['NodeList', 'DOMTokenList', 'MediaList', 'StyleSheetList'
 /* 88 */
 /***/ (function(module, exports) {
 
-(function() { module.exports = window["React1"]; }());
+(function() { module.exports = window["React"]; }());
 
 /***/ })
 /******/ ]);
