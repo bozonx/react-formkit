@@ -1,14 +1,5 @@
-(function webpackUniversalModuleDefinition(root, factory) {
-	if(typeof exports === 'object' && typeof module === 'object')
-		module.exports = factory(require("React1"));
-	else if(typeof define === 'function' && define.amd)
-		define(["React1"], factory);
-	else if(typeof exports === 'object')
-		exports["ReactFormKit"] = factory(require("React1"));
-	else
-		root["ReactFormKit"] = factory(root["React1"]);
-})(this, function(__WEBPACK_EXTERNAL_MODULE_88__) {
-return /******/ (function(modules) { // webpackBootstrap
+window["ReactFormKit"] =
+/******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
 /******/
@@ -725,6 +716,7 @@ module.exports = function(it){
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_core_js_object_get_prototype_of__ = __webpack_require__(45);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_core_js_object_get_prototype_of___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_babel_runtime_core_js_object_get_prototype_of__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_classCallCheck__ = __webpack_require__(49);
@@ -804,27 +796,24 @@ var WebForm = function (_React$Component) {
   return WebForm;
 }(React.Component);
 
-/* harmony default export */ __webpack_exports__["a"] = (WebForm);
+/* harmony default export */ __webpack_exports__["default"] = (WebForm);
 
 /***/ }),
 /* 42 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__web_WebForm__ = __webpack_require__(41);
-
+//import WebForm from './web/WebForm';
+var WebForm = __webpack_require__(41).default;
 //const WebForm
 
-// module.exports = {
-//   aa: 11222,
-//   WebForm: WebForm,
-// };
+module.exports = {
+  WebForm: WebForm
+};
 
-/* harmony default export */ __webpack_exports__["default"] = ({
-  aa: 11222,
-  WebForm: __WEBPACK_IMPORTED_MODULE_0__web_WebForm__["a" /* default */]
-});
+// export default {
+//   aa: 11222,
+//   WebForm,
+// }
 
 /***/ }),
 /* 43 */
@@ -1726,8 +1715,8 @@ for(var collections = ['NodeList', 'DOMTokenList', 'MediaList', 'StyleSheetList'
 /* 88 */
 /***/ (function(module, exports) {
 
-module.exports = __WEBPACK_EXTERNAL_MODULE_88__;
+(function() { module.exports = window["React1"]; }());
 
 /***/ })
 /******/ ]);
-});
+//# sourceMappingURL=react-formkit-web.js.map

@@ -1,6 +1,5 @@
-import WebForm from './web/WebForm';
+const WebForm = require('./web/WebForm').default;
 
 module.exports = {
-  aa: 11222,
-  //WebForm: WebForm,
+  WebForm: WebForm,
 };
