@@ -15,7 +15,7 @@ export default class WebForm extends React.Component {
   }
 
   componentWillMount() {
-    this.props.onSubmit && this.form.onSubmit((...p) => this.props.onSubmit(...p));
+    this.props.onSubmit && this.props.form.onSubmit((...p) => this.props.onSubmit(...p));
   }
 
   _handleSubmit(event) {
