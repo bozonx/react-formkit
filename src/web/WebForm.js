@@ -18,6 +18,7 @@ export default class WebForm extends React.Component {
     };
 
     this.props.form.on('anyChange', () => {
+      //console.log(1111111111, this.props.form.$getWholeStorageState() )
       this.setState({ formStorage: this.props.form.$getWholeStorageState() });
     });
   }
