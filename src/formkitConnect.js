@@ -17,9 +17,16 @@ export default function formkitConnect(config) {
 
         const form = config.getForm(this.props, this._reactInternalInstance._context);
 
+        // init form
+        if (config.fields) {
+          form.init(config.fields);
+        }
+
+        // set initial state
         this.setState({
           formStorage: form.$getWholeStorageState(),
         });
+        // update react state on each change
         form.on('anyChange', () => {
           this.setState({
             formStorage: form.$getWholeStorageState(),

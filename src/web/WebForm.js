@@ -12,28 +12,15 @@ export default class WebForm extends React.Component {
 
   constructor(params) {
     super(params);
-
-    this.state = {
-      formStorage: {},
-    };
-
-    this.props.form.on('anyChange', () => {
-      //console.log(1111111111, this.props.form.$getWholeStorageState() )
-      this.setState({ formStorage: this.props.form.$getWholeStorageState() });
-    });
   }
 
   componentWillMount() {
+    this.props.onSubmit && this.form.onSubmit((...p) => this.props.onSubmit(...p));
   }
 
   _handleSubmit(event) {
     event.preventDefault();
-    if (this.props.onSubmit) {
-      this.props.onSubmit(event);
-    }
-    else {
-      this.props.form.handleSubmit();
-    }
+    this.props.form.handleSubmit();
   }
 
   render() {

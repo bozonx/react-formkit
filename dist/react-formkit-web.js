@@ -897,9 +897,16 @@ function formkitConnect(config) {
 
           var form = config.getForm(this.props, this._reactInternalInstance._context);
 
+          // init form
+          if (config.fields) {
+            form.init(config.fields);
+          }
+
+          // set initial state
           this.setState({
             formStorage: form.$getWholeStorageState()
           });
+          // update react state on each change
           form.on('anyChange', function () {
             _this2.setState({
               formStorage: form.$getWholeStorageState()
@@ -909,8 +916,6 @@ function formkitConnect(config) {
           this.updatedProps = __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends___default()({}, this.props, {
             form: form
           });
-
-          //this.component = createElement(Target, this.updatedProps, this.updatedProps.children);
         }
       }, {
         key: 'render',
@@ -960,42 +965,36 @@ var WebForm = function (_React$Component) {
   function WebForm(params) {
     __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_classCallCheck___default()(this, WebForm);
 
-    var _this = __WEBPACK_IMPORTED_MODULE_3_babel_runtime_helpers_possibleConstructorReturn___default()(this, (WebForm.__proto__ || __WEBPACK_IMPORTED_MODULE_0_babel_runtime_core_js_object_get_prototype_of___default()(WebForm)).call(this, params));
-
-    _this.state = {
-      formStorage: {}
-    };
-
-    _this.props.form.on('anyChange', function () {
-      //console.log(1111111111, this.props.form.$getWholeStorageState() )
-      _this.setState({ formStorage: _this.props.form.$getWholeStorageState() });
-    });
-    return _this;
+    return __WEBPACK_IMPORTED_MODULE_3_babel_runtime_helpers_possibleConstructorReturn___default()(this, (WebForm.__proto__ || __WEBPACK_IMPORTED_MODULE_0_babel_runtime_core_js_object_get_prototype_of___default()(WebForm)).call(this, params));
   }
 
   __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_createClass___default()(WebForm, [{
     key: 'componentWillMount',
-    value: function componentWillMount() {}
+    value: function componentWillMount() {
+      var _this2 = this;
+
+      this.props.onSubmit && this.form.onSubmit(function () {
+        var _props;
+
+        return (_props = _this2.props).onSubmit.apply(_props, arguments);
+      });
+    }
   }, {
     key: '_handleSubmit',
     value: function _handleSubmit(event) {
       event.preventDefault();
-      if (this.props.onSubmit) {
-        this.props.onSubmit(event);
-      } else {
-        this.props.form.handleSubmit();
-      }
+      this.props.form.handleSubmit();
     }
   }, {
     key: 'render',
     value: function render() {
-      var _this2 = this;
+      var _this3 = this;
 
       // TODO: обработать все остальные параметры
       return __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement(
         'form',
         { onSubmit: function onSubmit(event) {
-            return _this2._handleSubmit(event);
+            return _this3._handleSubmit(event);
           } },
         this.props.children
       );
