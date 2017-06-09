@@ -7,4 +7,8 @@ module.exports = merge(commonConf, {
     filename: 'react-formkit.js',
     libraryTarget: 'umd',
   },
+  externals: {
+    'react': true,
+    'prop-types': true,
+  }
 });

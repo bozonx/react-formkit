@@ -13,4 +13,8 @@ module.exports = merge(commonConf, {
   plugins: [
     new webpack.LoaderOptionsPlugin({ minimize: true }),
   ],
+  externals: {
+    'react': 'React',
+    'prop-types': 'PropTypes',
+  }
 });

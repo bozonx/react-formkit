@@ -727,25 +727,22 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_babel_runtime_helpers_possibleConstructorReturn___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_babel_runtime_helpers_possibleConstructorReturn__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_babel_runtime_helpers_inherits__ = __webpack_require__(51);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_babel_runtime_helpers_inherits___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_babel_runtime_helpers_inherits__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_react__ = __webpack_require__(89);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_react__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_prop_types__ = __webpack_require__(88);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_prop_types___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6_prop_types__);
 
 
 
 
 
-//import React from 'react';
-//import PropTypes from 'prop-types';
+
+
 //import _ from 'lodash';
 
-var React = __webpack_require__(88);
 
 var WebForm = function (_React$Component) {
   __WEBPACK_IMPORTED_MODULE_4_babel_runtime_helpers_inherits___default()(WebForm, _React$Component);
-
-  // static propTypes = {
-  //   children: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
-  //   onSubmit: PropTypes.func,
-  //   form: PropTypes.object.isRequired,
-  // };
 
   function WebForm(params) {
     __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_classCallCheck___default()(this, WebForm);
@@ -781,7 +778,7 @@ var WebForm = function (_React$Component) {
       var _this2 = this;
 
       // TODO: обработать все остальные параметры
-      return React.createElement(
+      return __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement(
         'form',
         { onSubmit: function onSubmit(event) {
             return _this2._handleSubmit(event);
@@ -792,8 +789,13 @@ var WebForm = function (_React$Component) {
   }]);
 
   return WebForm;
-}(React.Component);
+}(__WEBPACK_IMPORTED_MODULE_5_react___default.a.Component);
 
+WebForm.propTypes = {
+  children: __WEBPACK_IMPORTED_MODULE_6_prop_types___default.a.oneOfType([__WEBPACK_IMPORTED_MODULE_6_prop_types___default.a.object, __WEBPACK_IMPORTED_MODULE_6_prop_types___default.a.array]),
+  onSubmit: __WEBPACK_IMPORTED_MODULE_6_prop_types___default.a.func,
+  form: __WEBPACK_IMPORTED_MODULE_6_prop_types___default.a.object.isRequired
+};
 /* harmony default export */ __webpack_exports__["default"] = (WebForm);
 
 /***/ }),
@@ -1704,6 +1706,12 @@ for(var collections = ['NodeList', 'DOMTokenList', 'MediaList', 'StyleSheetList'
 
 /***/ }),
 /* 88 */
+/***/ (function(module, exports) {
+
+(function() { module.exports = window["PropTypes"]; }());
+
+/***/ }),
+/* 89 */
 /***/ (function(module, exports) {
 
 (function() { module.exports = window["React"]; }());

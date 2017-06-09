@@ -9,4 +9,8 @@ module.exports = merge(commonConf, {
     libraryTarget: 'window',
   },
   devtool: 'source-map',
+  externals: {
+    'react': 'React',
+    'prop-types': 'PropTypes',
+  }
 });
