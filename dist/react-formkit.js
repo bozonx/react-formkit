@@ -18374,7 +18374,7 @@ var WebTextInput = function (_React$Component) {
     var _this = __WEBPACK_IMPORTED_MODULE_4_babel_runtime_helpers_possibleConstructorReturn___default()(this, (WebTextInput.__proto__ || __WEBPACK_IMPORTED_MODULE_1_babel_runtime_core_js_object_get_prototype_of___default()(WebTextInput)).call(this, props));
 
     _this.state = {
-      value: _this.props.field.value
+      value: _this._normalizeValue(_this.props.field.value)
     };
 
     _this.inputProps = __WEBPACK_IMPORTED_MODULE_8_lodash___default.a.omit(_this.props, ['field', 'type', 'onChange', 'onKeyPress', 'onFocus', 'onBlur']);
@@ -18388,7 +18388,7 @@ var WebTextInput = function (_React$Component) {
 
       this.props.field.on('anyChange', function () {
         return _this2.setState({
-          value: _this2.props.field.value
+          value: _this2._normalizeValue(_this2.props.field.value)
         });
       });
     }
@@ -18420,6 +18420,13 @@ var WebTextInput = function (_React$Component) {
       this.props.onBlur && this.props.onBlur(event);
     }
   }, {
+    key: '_normalizeValue',
+    value: function _normalizeValue(value) {
+      if (__WEBPACK_IMPORTED_MODULE_8_lodash___default.a.isString(value) || __WEBPACK_IMPORTED_MODULE_8_lodash___default.a.isNumber(value)) return value;
+
+      return '';
+    }
+  }, {
     key: 'render',
     value: function render() {
       var _this3 = this;
@@ -18427,17 +18434,17 @@ var WebTextInput = function (_React$Component) {
       return __WEBPACK_IMPORTED_MODULE_6_react___default.a.createElement('input', __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends___default()({}, this.inputProps, {
         type: this.props.type,
         value: this.state.value,
-        onChange: function onChange() {
-          return _this3.handleChange.apply(_this3, arguments);
+        onChange: function onChange(e) {
+          return _this3.handleChange(e);
         },
-        onKeyPress: function onKeyPress() {
-          return _this3.handleKeyPress.apply(_this3, arguments);
+        onKeyPress: function onKeyPress(e) {
+          return _this3.handleKeyPress(e);
         },
-        onFocus: function onFocus() {
-          return _this3.handleFocus.apply(_this3, arguments);
+        onFocus: function onFocus(e) {
+          return _this3.handleFocus(e);
         },
-        onBlur: function onBlur() {
-          return _this3.handleBlur.apply(_this3, arguments);
+        onBlur: function onBlur(e) {
+          return _this3.handleBlur(e);
         } }));
     }
   }]);

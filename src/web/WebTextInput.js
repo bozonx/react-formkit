@@ -21,7 +21,7 @@ export default class WebTextInput extends React.Component {
     super(props);
 
     this.state = {
-      value: this.props.field.value,
+      value: this._normalizeValue(this.props.field.value),
     };
 
     this.inputProps = _.omit(this.props, [
@@ -36,7 +36,7 @@ export default class WebTextInput extends React.Component {
 
   componentWillMount() {
     this.props.field.on('anyChange', () => this.setState({
-      value: this.props.field.value,
+      value: this._normalizeValue(this.props.field.value),
     }));
   }
 
@@ -63,13 +63,19 @@ export default class WebTextInput extends React.Component {
     this.props.onBlur && this.props.onBlur(event);
   }
 
+  _normalizeValue(value) {
+    if (_.isString(value) || _.isNumber(value)) return value;
+
+    return '';
+  }
+
   render() {
     return <input {...this.inputProps}
                   type={this.props.type}
                   value={this.state.value}
-                  onChange={(...p) => this.handleChange(...p)}
-                  onKeyPress={(...p) => this.handleKeyPress(...p)}
-                  onFocus={(...p) => this.handleFocus(...p)}
-                  onBlur={(...p) => this.handleBlur(...p)} />;
+                  onChange={(e) => this.handleChange(e)}
+                  onKeyPress={(e) => this.handleKeyPress(e)}
+                  onFocus={(e) => this.handleFocus(e)}
+                  onBlur={(e) => this.handleBlur(e)} />;
   }
 }
