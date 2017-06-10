@@ -1,9 +1,12 @@
 import { Component, createElement } from 'react';
+import PropTypes from 'prop-types';
 
 
 export default function formkitConnect(config) {
   return function decorator(Target) {
     return class extends Component {
+      static contextTypes = Target.contextTypes;
+
       constructor(props) {
         super(props);
 
@@ -15,7 +18,8 @@ export default function formkitConnect(config) {
       componentWillMount() {
         if (!config || !config.getForm) return;
 
-        const form = config.getForm(this.props, this._reactInternalInstance._context);
+        //const form = config.getForm(this.props, this._reactInternalInstance._context);
+        const form = config.getForm(this.props, this.context);
 
         // init form
         if (config.fields) {
