@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-//import _ from 'lodash';
+import _ from 'lodash';
 
 
 export default class WebForm extends React.Component {
@@ -12,6 +12,12 @@ export default class WebForm extends React.Component {
 
   constructor(params) {
     super(params);
+
+    this.inputProps = _.omit(this.props, [
+      'children',
+      'onSubmit',
+      'form',
+    ]);
   }
 
   componentWillMount() {
@@ -24,7 +30,7 @@ export default class WebForm extends React.Component {
   }
 
   render() {
-    // TODO: обработать все остальные параметры
-    return <form onSubmit={(event) => this._handleSubmit(event)}>{this.props.children}</form>;
+    return <form {...this.inputProps}
+                 onSubmit={(event) => this._handleSubmit(event)}>{this.props.children}</form>;
   }
 }

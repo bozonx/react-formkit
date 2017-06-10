@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import _ from 'lodash';
 
 
-export default class InputText extends React.Component {
+export default class WebTextInput extends React.Component {
   static propTypes = {
     field: PropTypes.object.isRequired,
     type: PropTypes.string,
