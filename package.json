@@ -2,7 +2,6 @@
   "name": "react-formkit",
   "version": "0.1.0",
   "description": "React connector to formkit.",
-  "private": true,
   "license": "MIT",
   "repository": "git@github.com:bozonx/react-formkit.git",
   "engines": {
