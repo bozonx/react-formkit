@@ -37,6 +37,14 @@
     "react-dom": "^15.5.4"
   },
   "devDependencies": {
+    "babel-jest": "^20.0.3",
+    "babel-plugin-transform-es2015-modules-commonjs": "^6.24.1",
+    "enzyme": "^2.8.2",
+    "enzyme-to-json": "^1.5.1",
+    "identity-obj-proxy": "^3.0.0",
+    "jest": "^20.0.4",
+    "jest-enzyme": "^3.2.0",
+    "react-addons-test-utils": "^15.5.1",
     "webpack": "^2.6.1",
     "webpack-merge": "^4.1.0"
   }
