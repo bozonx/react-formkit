@@ -23,8 +23,16 @@ export default class WebTextInput extends React.Component {
     this.state = {
       value: this._normalizeValue(this.props.field.value),
     };
+  }
 
-    this.inputProps = _.omit(this.props, [
+  componentWillMount() {
+    this.props.field.on('anyChange', () => this.setState({
+      value: this._normalizeValue(this.props.field.value),
+    }));
+  }
+
+  _getElementProps() {
+    return _.omit(this.props, [
       'field',
       'type',
       'onChange',
@@ -34,30 +42,24 @@ export default class WebTextInput extends React.Component {
     ]);
   }
 
-  componentWillMount() {
-    this.props.field.on('anyChange', () => this.setState({
-      value: this._normalizeValue(this.props.field.value),
-    }));
-  }
-
-  handleChange(event) {
+  _handleChange(event) {
     const value = event.target.value;
     this.props.field.handleChange(value);
     this.props.onChange && this.props.onChange(event, value);
   }
 
-  handleKeyPress(event) {
+  _handleKeyPress(event) {
     if (event.key == 'Enter') this.props.field.handlePressEnter();
     this.props.onKeyPress && this.props.onKeyPress(event);
   }
 
-  handleFocus(event) {
+  _handleFocus(event) {
     // rise focus on formkit's field in any way
     this.props.field.handleFocusIn();
     this.props.onFocus && this.props.onFocus(event);
   }
 
-  handleBlur(event) {
+  _handleBlur(event) {
     // rise blur on formkit's field in any way
     this.props.field.handleBlur();
     this.props.onBlur && this.props.onBlur(event);
@@ -70,12 +72,12 @@ export default class WebTextInput extends React.Component {
   }
 
   render() {
-    return <input {...this.inputProps}
+    return <input {...this._getElementProps()}
                   type={this.props.type}
                   value={this.state.value}
-                  onChange={(e) => this.handleChange(e)}
-                  onKeyPress={(e) => this.handleKeyPress(e)}
-                  onFocus={(e) => this.handleFocus(e)}
-                  onBlur={(e) => this.handleBlur(e)} />;
+                  onChange={(e) => this._handleChange(e)}
+                  onKeyPress={(e) => this._handleKeyPress(e)}
+                  onFocus={(e) => this._handleFocus(e)}
+                  onBlur={(e) => this._handleBlur(e)} />;
   }
 }
