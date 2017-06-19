@@ -1,6 +1,6 @@
 {
   "name": "react-formkit",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "React connector to formkit.",
   "license": "MIT",
   "repository": "git@github.com:bozonx/react-formkit.git",
