@@ -1,4 +1,5 @@
 import React from 'react';
+import _ from 'lodash';
 
 
 export default function formkitConnect(config) {
@@ -31,10 +32,9 @@ export default function formkitConnect(config) {
         });
         // update react state on each change
         form.on('anyChange', () => {
-          // TODO: из-за этого сбрассывается экранная клавиатура
-          // this.setState({
-          //   formStorage: form.$getWholeStorageState(),
-          // });
+          this.setState({
+            formStorage: form.$getWholeStorageState(),
+          });
         });
 
         this.updatedProps = {
