@@ -1,10 +1,9 @@
-import { Component, createElement } from 'react';
-import PropTypes from 'prop-types';
+import React from 'react';
 
 
 export default function formkitConnect(config) {
   return function decorator(Target) {
-    return class extends Component {
+    return class extends React.Component {
       static contextTypes = Target.contextTypes;
 
       constructor(props) {
@@ -32,19 +31,20 @@ export default function formkitConnect(config) {
         });
         // update react state on each change
         form.on('anyChange', () => {
-          this.setState({
-            formStorage: form.$getWholeStorageState(),
-          });
+          // TODO: из-за этого сбрассывается экранная клавиатура
+          // this.setState({
+          //   formStorage: form.$getWholeStorageState(),
+          // });
         });
 
         this.updatedProps = {
-          ...this.props,
+          ..._.omit(this.props, 'children'),
           form,
         };
       }
 
       render() {
-        return createElement(Target, this.updatedProps, this.updatedProps.children);
+        return <Target {...this.updatedProps}>{this.updatedProps.children}</Target>;
       }
     }
   }
