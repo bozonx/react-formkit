@@ -78,7 +78,8 @@ export default class MobileTextInput extends React.Component {
     const { Component } = this;
 
     return <Component {...this._getElementProps()}
-                      value={this.state.value}
+                      //blurOnSubmit={false}
+                      value={this._normalizeValue(this.props.field.value)}
                       onChangeText={(value) => this._handleChange(value)}
                       onFocus={(e) => this._handleFocus(e)}
                       onBlur={(e) => this._handleBlur(e)}
