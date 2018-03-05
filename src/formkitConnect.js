@@ -19,31 +19,26 @@ export default function formkitConnect(config) {
         if (!config || !config.getForm) return;
 
         //const form = config.getForm(this.props, this._reactInternalInstance._context);
-        const form = config.getForm(this.props, this.context);
+        this.form = config.getForm(this.props, this.context);
 
         // init form
         if (config.fields) {
           //form.init(config.fields);
-          form.init(config.fields, config.validate);
+          this.form.init(config.fields, config.validate);
         }
 
         // set initial state
         this.setState({
-          formStorage: form.$getWholeStorageState(),
+          formStorage: this.form.$getWholeStorageState(),
         });
         // update react state on each change
-        form.on('anyChange', () => {
+        this.form.on('anyChange', () => {
           this.setState({
-            formStorage: form.$getWholeStorageState(),
+            formStorage: this.form.$getWholeStorageState(),
           });
         });
 
-        this.updatedProps = {
-          ..._.omit(this.props, 'children'),
-          form,
-        };
-
-        this._injectProps(form);
+        this._injectProps(this.form);
       }
 
       _injectProps(form) {
@@ -68,7 +63,7 @@ export default function formkitConnect(config) {
       }
 
       render() {
-        return <Target {...this.updatedProps}>{this.updatedProps.children}</Target>;
+        return <Target {...this.props} form={this.form} />;
       }
     }
   }
