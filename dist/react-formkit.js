@@ -18042,6 +18042,7 @@ function formkitConnect(config) {
           // init form
           if (config.fields) {
             form.init(config.fields);
+            //form.init(config.fields, config.validate);
           }
 
           // set initial state
@@ -18058,6 +18059,34 @@ function formkitConnect(config) {
           this.updatedProps = __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends___default()({}, __WEBPACK_IMPORTED_MODULE_7_lodash___default.a.omit(this.props, 'children'), {
             form: form
           });
+
+          //this._injectProps(form);
+        }
+      }, {
+        key: '_injectProps',
+        value: function _injectProps(form) {
+          var recursive = function recursive(container) {
+            if (__WEBPACK_IMPORTED_MODULE_7_lodash___default.a.isPlainObject(container)) {
+              __WEBPACK_IMPORTED_MODULE_7_lodash___default.a.each(container, function (item, name) {
+                return recursive(item);
+              });
+
+              return;
+            }
+
+            console.log(1111111111, container
+
+            // else means field
+            // container.props = {
+            //   name: container.name,
+            //   value: container.value,
+            //   disabled: container.disabled,
+            //   onChange: (event) => { container.handleChange(event.target.value) },
+            // };
+            );
+          };
+
+          recursive(form.fields);
         }
       }, {
         key: 'render',

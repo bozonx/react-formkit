@@ -23,7 +23,8 @@ export default function formkitConnect(config) {
 
         // init form
         if (config.fields) {
-          form.init(config.fields);
+          //form.init(config.fields);
+          form.init(config.fields, config.validate);
         }
 
         // set initial state
@@ -41,6 +42,29 @@ export default function formkitConnect(config) {
           ..._.omit(this.props, 'children'),
           form,
         };
+
+        this._injectProps(form);
+      }
+
+      _injectProps(form) {
+        const recursive = (container) => {
+          if (_.isPlainObject(container)) {
+            _.each(container, (item, name) => recursive(item));
+
+            return;
+          }
+
+          // else means field
+          container.props = {
+            name: container.name,
+            value: container.value,
+            disabled: container.disabled,
+            onChange: (event) => {
+              container.handleChange(event.target.value) },
+          };
+        };
+
+        recursive(form.fields);
       }
 
       render() {

@@ -8,7 +8,7 @@
     "node": ">=5.11.1"
   },
   "author": "Ivan Kozyrin <ipkozyrin@gmail.com>",
-  "main": "dist/react-formkit",
+  "main": "dist/react-formkit.js",
   "scripts": {
     "test": "yarn run test-web",
     "test-web": "node_modules/.bin/jest --config=jest-web.json",
