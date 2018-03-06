@@ -11,7 +11,8 @@ export default function formkitConnect(config) {
         super(props);
 
         this.state = {
-          formStorage: {},
+          formState: {},
+          fields: {},
         };
       }
 
@@ -28,42 +29,113 @@ export default function formkitConnect(config) {
         }
 
         // set initial state
-        this.setState({
-          formStorage: this.form.$getWholeStorageState(),
-        });
+        this.setState({ formState: this._getFormState() });
+        this._initFields();
+
         // update react state on each change
-        this.form.on('anyChange', () => {
+        this.form.on('anyChange', (aa,dd,ff) => {
+          console.log(111111, aa,dd,ff)
+
           this.setState({
-            formStorage: this.form.$getWholeStorageState(),
+            formState: this._getFormState(),
+          }, () => {
+            // TODO: обновлять только то что изменилось
+            this._initFields();
           });
         });
 
-        this._injectProps(this.form);
+        //this._injectProps(this.form);
       }
 
-      _injectProps(form) {
-        const recursive = (container) => {
+      _getFormState() {
+        return {
+          dirty: this.form.dirty,
+          touched: this.form.touched,
+          saving: this.form.saving,
+          submitting: this.form.submitting,
+          submitable: this.form.submitable,
+          valid: this.form.valid,
+          invalidMessages: this.form.invalidMessages,
+        };
+      }
+
+      _initFields() {
+        const fields = _.cloneDeep(this.state.fields);
+
+        const recursively = (container, path) => {
           if (_.isPlainObject(container)) {
-            _.each(container, (item, name) => recursive(item));
+            // go deeper
+            _.each(container, (field, name) => {
+              const curPath = _.trimStart(`${path}.${name}`, '.');
+              recursively(field, curPath);
+            });
 
             return;
           }
 
-          // else means field
-          container.props = {
-            name: container.name,
-            value: container.value,
-            disabled: container.disabled,
-            onChange: (event) => {
-              container.handleChange(event.target.value) },
-          };
+          const field = container;
+          _.set(fields, path, {
+            value: field.value,
+            name: field.name,
+            path: field.path,
+            disabled: field.disabled,
+            dirty: field.dirty,
+            touched: field.touched,
+            valid: field.valid,
+            invalidMsg: field.invalidMsg,
+            saving: field.saving,
+            focused: field.focused,
+            defaultValue: field.defaultValue,
+            // TODO: add others!!!!!
+            props: {
+              name: field.name,
+              value: field.value,
+              disabled: field.disabled,
+              onChange: (event) => {
+                field.handleChange(event.target.value);
+              },
+            }
+          });
+
         };
 
-        recursive(form.fields);
+        recursively(this.form.fields, '');
+
+        this.setState({ fields });
       }
 
+      // _injectProps(form) {
+      //   const recursive = (container) => {
+      //     if (_.isPlainObject(container)) {
+      //       _.each(container, (item, name) => recursive(item));
+      //
+      //       return;
+      //     }
+      //
+      //     // else means field
+      //     container.props = {
+      //       name: container.name,
+      //       value: container.value,
+      //       disabled: container.disabled,
+      //       onChange: (event) => {
+      //         container.handleChange(event.target.value) },
+      //     };
+      //   };
+      //
+      //   recursive(form.fields);
+      // }
+
       render() {
-        return <Target {...this.props} form={this.form} />;
+        return <Target {...this.props}
+                       form={this.form}
+                       fields={this.state.fields}
+                       dirty={this.state.formState.dirty}
+                       touched={this.state.formState.touched}
+                       saving={this.state.formState.saving}
+                       submitting={this.state.formState.submitting}
+                       submitable={this.state.formState.submitable}
+                       valid={this.state.formState.valid}
+                       invalidMessages={this.state.formState.invalidMessages} />;
       }
     }
   }
