@@ -17,10 +17,9 @@ export default function formkitConnect(config) {
       }
 
       componentWillMount() {
-        if (!config || !config.getForm) return;
+        if (!config) return;
 
-        //const form = config.getForm(this.props, this._reactInternalInstance._context);
-        this.form = config.getForm(this.props, this.context);
+        this.form = this._instantiateForm();
 
         // init form
         if (config.fields) {
@@ -82,7 +81,7 @@ export default function formkitConnect(config) {
             dirty: field.dirty,
             touched: field.touched,
             valid: field.valid,
-            invalidMsg: field.invalidMsg,
+            error: field.invalidMsg,
             saving: field.saving,
             focused: field.focused,
             defaultValue: field.defaultValue,
@@ -127,6 +126,27 @@ export default function formkitConnect(config) {
       //   recursive(form.fields);
       // }
 
+
+      _instantiateForm() {
+        if (config.getForm) {
+          //const form = config.getForm(this.props, this._reactInternalInstance._context);
+          return config.getForm(this.props, this.context);
+        }
+        else if (_.isPlainObject(config.config)) {
+          // TODO: use your own formkit
+        }
+        else {
+          throw new Error(`You have to specify a form config or "getForm" callback`);
+        }
+      }
+
+      _handleSubmit = (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        this.form.handleSubmit();
+      };
+
+
       render() {
         return <Target {...this.props}
                        form={this.form}
@@ -137,8 +157,10 @@ export default function formkitConnect(config) {
                        submitting={this.state.formState.submitting}
                        submitable={this.state.formState.submitable}
                        valid={this.state.formState.valid}
-                       invalidMessages={this.state.formState.invalidMessages} />;
+                       invalidMessages={this.state.formState.invalidMessages}
+                       handleSubmit={this._handleSubmit} />;
       }
     }
   }
+
 }
