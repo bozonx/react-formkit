@@ -86,7 +86,6 @@ export default function formkitConnect(config) {
             saving: field.saving,
             focused: field.focused,
             defaultValue: field.defaultValue,
-            // TODO: add others!!!!!
             props: {
               name: field.name,
               value: field.value,
