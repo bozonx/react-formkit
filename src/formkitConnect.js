@@ -100,7 +100,10 @@ export default function formkitConnect(config) {
 
         recursively(this.form.fields, '');
 
-        this.setState({ fields });
+        this.setState({ fields }, () => {
+          // set initial values
+          this.form.setSavedValues(this.props.initialValues);
+        });
       }
 
       // _injectProps(form) {
