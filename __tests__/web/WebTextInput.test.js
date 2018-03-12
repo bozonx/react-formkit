@@ -3,7 +3,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 
-import WebTextInput from '../../src/web/WebTextInput';
+import WebTextInput from '../../_old/web/WebTextInput';
 
 
 it('initial snapshot', () => {

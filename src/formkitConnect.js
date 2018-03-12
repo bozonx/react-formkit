@@ -7,14 +7,13 @@ export default function formkitConnect(config) {
     return class extends React.Component {
       static contextTypes = Target.contextTypes;
 
-      constructor(props) {
-        super(props);
 
-        this.state = {
-          formState: {},
-          fields: {},
-        };
-      }
+      state = {
+        formState: {},
+        fields: {},
+      };
+
+      // TODO: слушать обновления initalState
 
       componentWillMount() {
         if (!config) return;
@@ -29,12 +28,14 @@ export default function formkitConnect(config) {
 
         // set initial state
         this.setState({ formState: this._getFormState() });
-        this._initFields();
+        this._initFields()
+          .then(() => {
+            // set initial values
+            this.form.setSavedValues(this.props.initialValues);
+          });
 
         // update react state on each change
         this.form.on('anyChange', (aa,dd,ff) => {
-          console.log(111111, aa,dd,ff)
-
           this.setState({
             formState: this._getFormState(),
           }, () => {
@@ -87,10 +88,16 @@ export default function formkitConnect(config) {
             defaultValue: field.defaultValue,
             props: {
               name: field.name,
+              //defaultValue: field.value,
               value: field.value,
               disabled: field.disabled,
               onChange: (event) => {
-                field.handleChange(event.target.value);
+                if (_.isString(event)) {
+                  field.handleChange(event);
+                }
+                else {
+                  field.handleChange(event.target.value);
+                }
               },
             }
           });
@@ -99,33 +106,10 @@ export default function formkitConnect(config) {
 
         recursively(this.form.fields, '');
 
-        this.setState({ fields }, () => {
-          // set initial values
-          this.form.setSavedValues(this.props.initialValues);
+        return new Promise((resolve) => {
+          this.setState({ fields }, resolve);
         });
       }
-
-      // _injectProps(form) {
-      //   const recursive = (container) => {
-      //     if (_.isPlainObject(container)) {
-      //       _.each(container, (item, name) => recursive(item));
-      //
-      //       return;
-      //     }
-      //
-      //     // else means field
-      //     container.props = {
-      //       name: container.name,
-      //       value: container.value,
-      //       disabled: container.disabled,
-      //       onChange: (event) => {
-      //         container.handleChange(event.target.value) },
-      //     };
-      //   };
-      //
-      //   recursive(form.fields);
-      // }
-
 
       _instantiateForm() {
         if (config.getForm) {

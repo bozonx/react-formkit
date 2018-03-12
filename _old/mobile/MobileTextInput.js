@@ -3,10 +3,10 @@ import PropTypes from 'prop-types';
 import _ from 'lodash';
 
 
-export default class WebTextInput extends React.Component {
+export default class MobileTextInput extends React.Component {
   static propTypes = {
     field: PropTypes.object.isRequired,
-    type: PropTypes.string,
+    component: PropTypes.func.isRequired,
     onChange: PropTypes.func,
     onKeyPress: PropTypes.func,
     onFocus: PropTypes.func,
@@ -14,7 +14,6 @@ export default class WebTextInput extends React.Component {
   };
 
   static defaultProps = {
-    type: 'text',
   };
 
   constructor(props) {
@@ -23,6 +22,8 @@ export default class WebTextInput extends React.Component {
     this.state = {
       value: this._normalizeValue(this.props.field.value),
     };
+
+    this.Component = this.props.component;
   }
 
   componentWillMount() {
@@ -34,7 +35,7 @@ export default class WebTextInput extends React.Component {
   _getElementProps() {
     return _.omit(this.props, [
       'field',
-      'type',
+      'component',
       'onChange',
       'onKeyPress',
       'onFocus',
@@ -42,16 +43,16 @@ export default class WebTextInput extends React.Component {
     ]);
   }
 
-  _handleChange(event) {
-    const value = event.target.value;
+  _handleChange(value) {
     this.props.field.handleChange(value);
-    this.props.onChange && this.props.onChange(event, value);
+    this.props.onChange && this.props.onChange({}, value);
   }
 
-  _handleKeyPress(event) {
-    if (event.key == 'Enter') this.props.field.handlePressEnter();
-    this.props.onKeyPress && this.props.onKeyPress(event);
-  }
+  // _handleKeyPress(event) {
+  //   // TODO: check it
+  //   if (event.key == 'Enter') this.props.field.handlePressEnter();
+  //   this.props.onKeyPress && this.props.onKeyPress(event);
+  // }
 
   _handleFocus(event) {
     // rise focus on formkit's field in any way
@@ -72,12 +73,14 @@ export default class WebTextInput extends React.Component {
   }
 
   render() {
-    return <input {...this._getElementProps()}
-                  type={this.props.type}
-                  value={this.state.value}
-                  onChange={(e) => this._handleChange(e)}
-                  onKeyPress={(e) => this._handleKeyPress(e)}
-                  onFocus={(e) => this._handleFocus(e)}
-                  onBlur={(e) => this._handleBlur(e)} />;
+    const { Component } = this;
+
+    return <Component {...this._getElementProps()}
+                      //blurOnSubmit={false}
+                      value={this._normalizeValue(this.props.field.value)}
+                      onChangeText={(value) => this._handleChange(value)}
+                      onFocus={(e) => this._handleFocus(e)}
+                      onBlur={(e) => this._handleBlur(e)}
+    />;
   }
 }

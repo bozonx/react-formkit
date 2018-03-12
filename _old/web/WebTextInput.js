@@ -3,10 +3,10 @@ import PropTypes from 'prop-types';
 import _ from 'lodash';
 
 
-export default class MobileTextInput extends React.Component {
+export default class WebTextInput extends React.Component {
   static propTypes = {
     field: PropTypes.object.isRequired,
-    component: PropTypes.func.isRequired,
+    type: PropTypes.string,
     onChange: PropTypes.func,
     onKeyPress: PropTypes.func,
     onFocus: PropTypes.func,
@@ -14,6 +14,7 @@ export default class MobileTextInput extends React.Component {
   };
 
   static defaultProps = {
+    type: 'text',
   };
 
   constructor(props) {
@@ -22,8 +23,6 @@ export default class MobileTextInput extends React.Component {
     this.state = {
       value: this._normalizeValue(this.props.field.value),
     };
-
-    this.Component = this.props.component;
   }
 
   componentWillMount() {
@@ -35,7 +34,7 @@ export default class MobileTextInput extends React.Component {
   _getElementProps() {
     return _.omit(this.props, [
       'field',
-      'component',
+      'type',
       'onChange',
       'onKeyPress',
       'onFocus',
@@ -43,18 +42,16 @@ export default class MobileTextInput extends React.Component {
     ]);
   }
 
-  _handleChange(value) {
+  _handleChange(event) {
+    const value = event.target.value;
     this.props.field.handleChange(value);
-    this.props.onChange && this.props.onChange({}, value);
+    this.props.onChange && this.props.onChange(event, value);
   }
 
-  // _handleKeyPress(event) {
-  //   // TODO: check it
-  //   console.log(5555555, 'event.key', event.key)
-  //
-  //   if (event.key == 'Enter') this.props.field.handlePressEnter();
-  //   this.props.onKeyPress && this.props.onKeyPress(event);
-  // }
+  _handleKeyPress(event) {
+    if (event.key == 'Enter') this.props.field.handlePressEnter();
+    this.props.onKeyPress && this.props.onKeyPress(event);
+  }
 
   _handleFocus(event) {
     // rise focus on formkit's field in any way
@@ -69,20 +66,19 @@ export default class MobileTextInput extends React.Component {
   }
 
   _normalizeValue(value) {
+    // TODO: add support to checkbox
     if (_.isString(value) || _.isNumber(value)) return value;
 
     return '';
   }
 
   render() {
-    const { Component } = this;
-
-    return <Component {...this._getElementProps()}
-                      //blurOnSubmit={false}
-                      value={this._normalizeValue(this.props.field.value)}
-                      onChangeText={(value) => this._handleChange(value)}
-                      onFocus={(e) => this._handleFocus(e)}
-                      onBlur={(e) => this._handleBlur(e)}
-    />;
+    return <input {...this._getElementProps()}
+                  type={this.props.type}
+                  value={this.state.value}
+                  onChange={(e) => this._handleChange(e)}
+                  onKeyPress={(e) => this._handleKeyPress(e)}
+                  onFocus={(e) => this._handleFocus(e)}
+                  onBlur={(e) => this._handleBlur(e)} />;
   }
 }

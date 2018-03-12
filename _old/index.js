@@ -1,4 +1,4 @@
-const formkitConnect = require('./formkitConnect').default;
+const formkitConnect = require('../src/formkitConnect').default;
 const WebForm = require('./web/WebForm').default;
 const WebTextInput = require('./web/WebTextInput').default;
 const WebTextArea = require('./web/WebTextArea').default;
