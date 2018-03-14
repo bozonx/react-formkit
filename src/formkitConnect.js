@@ -36,15 +36,10 @@ export default function formkitConnect(config) {
 
         // update react state on each change
         this.form.on('anyChange', (data) => {
-          this.setState({
-            formState: this._getFormState(),
-          }, () => {
-            // TODO: обновлять только то что изменилось - see data.field
-            this._updateFields();
-          });
+          // TODO: обновлять только то что изменилось - see data.field
+          this._updateFields();
+          this.setState({ formState: this._getFormState() });
         });
-
-        //this._injectProps(this.form);
       }
 
       _getFormState() {
@@ -117,7 +112,7 @@ export default function formkitConnect(config) {
         };
 
         const fieldState = this._getFieldState(field);
-        fieldState.onChange = onChange;
+        fieldState.handleChange = onChange;
         fieldState.props.onChange = onChange;
 
         return fieldState;
