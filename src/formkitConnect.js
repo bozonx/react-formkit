@@ -73,35 +73,7 @@ export default function formkitConnect(config) {
             return;
           }
 
-          const field = container;
-          _.set(fields, path, {
-            value: field.value,
-            name: field.name,
-            path: field.path,
-            disabled: field.disabled,
-            dirty: field.dirty,
-            touched: field.touched,
-            valid: field.valid,
-            error: field.invalidMsg,
-            saving: field.saving,
-            focused: field.focused,
-            defaultValue: field.defaultValue,
-            props: {
-              name: field.name,
-              //defaultValue: field.value,
-              value: field.value,
-              disabled: field.disabled,
-              onChange: (event) => {
-                if (_.isString(event)) {
-                  field.handleChange(event);
-                }
-                else {
-                  field.handleChange(event.target.value);
-                }
-              },
-            }
-          });
-
+          _.set(fields, path, this._getFieldState(container));
         };
 
         recursively(this.form.fields, '');
@@ -109,6 +81,39 @@ export default function formkitConnect(config) {
         return new Promise((resolve) => {
           this.setState({ fields }, resolve);
         });
+      }
+
+      _getFieldState(field) {
+        const onChange = (event) => {
+          if (_.isString(event)) {
+            field.handleChange(event);
+          }
+          else {
+            field.handleChange(event.target.value);
+          }
+        };
+
+        return {
+          value: field.value,
+          name: field.name,
+          path: field.path,
+          disabled: field.disabled,
+          dirty: field.dirty,
+          touched: field.touched,
+          valid: field.valid,
+          error: field.invalidMsg,
+          saving: field.saving,
+          focused: field.focused,
+          defaultValue: field.defaultValue,
+          onChange,
+          props: {
+            name: field.name,
+            //defaultValue: field.value,
+            value: field.value,
+            disabled: field.disabled,
+            onChange,
+          }
+        }
       }
 
       _instantiateForm() {
