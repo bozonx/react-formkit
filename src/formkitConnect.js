@@ -35,12 +35,12 @@ export default function formkitConnect(config) {
           });
 
         // update react state on each change
-        this.form.on('anyChange', (aa,dd,ff) => {
+        this.form.on('anyChange', (data) => {
           this.setState({
             formState: this._getFormState(),
           }, () => {
-            // TODO: обновлять только то что изменилось
-            this._initFields();
+            // TODO: обновлять только то что изменилось - see data.field
+            this._updateFields();
           });
         });
 
@@ -60,7 +60,7 @@ export default function formkitConnect(config) {
       }
 
       _initFields() {
-        const fields = _.cloneDeep(this.state.fields);
+        const fields = {};
 
         const recursively = (container, path) => {
           if (_.isPlainObject(container)) {
@@ -73,7 +73,7 @@ export default function formkitConnect(config) {
             return;
           }
 
-          _.set(fields, path, this._getFieldState(container));
+          _.set(fields, path, this._getInitialFieldState(container));
         };
 
         recursively(this.form.fields, '');
@@ -83,7 +83,30 @@ export default function formkitConnect(config) {
         });
       }
 
-      _getFieldState(field) {
+      _updateFields() {
+        const fields = _.clone(this.state.fields);
+
+        const recursively = (container, path) => {
+          if (_.isPlainObject(container)) {
+            // go deeper
+            _.each(container, (field, name) => {
+              const curPath = _.trimStart(`${path}.${name}`, '.');
+              recursively(field, curPath);
+            });
+
+            return;
+          }
+
+          const currentState = _.get(fields, path);
+          _.set(fields, path, _.defaultsDeep(this._getFieldState(container), currentState));
+        };
+
+        recursively(this.form.fields, '');
+
+        this.setState({ fields });
+      }
+
+      _getInitialFieldState(field) {
         const onChange = (event) => {
           if (_.isString(event)) {
             field.handleChange(event);
@@ -93,6 +116,14 @@ export default function formkitConnect(config) {
           }
         };
 
+        const fieldState = this._getFieldState(field);
+        fieldState.onChange = onChange;
+        fieldState.props.onChange = onChange;
+
+        return fieldState;
+      }
+
+      _getFieldState(field) {
         return {
           value: field.value,
           name: field.name,
@@ -105,13 +136,11 @@ export default function formkitConnect(config) {
           saving: field.saving,
           focused: field.focused,
           defaultValue: field.defaultValue,
-          onChange,
           props: {
             name: field.name,
             //defaultValue: field.value,
             value: field.value,
             disabled: field.disabled,
-            onChange,
           }
         }
       }
