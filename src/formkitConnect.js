@@ -133,7 +133,6 @@ export default function formkitConnect(config) {
           defaultValue: field.defaultValue,
           props: {
             name: field.name,
-            //defaultValue: field.value,
             value: field.value,
             disabled: field.disabled,
           }
@@ -144,9 +143,6 @@ export default function formkitConnect(config) {
         if (config.getForm) {
           //const form = config.getForm(this.props, this._reactInternalInstance._context);
           return config.getForm(this.props, this.context);
-        }
-        else if (_.isPlainObject(config.config)) {
-          // TODO: use your own formkit
         }
         else {
           throw new Error(`You have to specify a form config or "getForm" callback`);
