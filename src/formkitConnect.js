@@ -127,7 +127,8 @@ export default function formkitConnect(config) {
           dirty: field.dirty,
           touched: field.touched,
           valid: field.valid,
-          error: field.invalidMsg,
+          // TODO: do it in formkit inside
+          error: (field.valid) ? null : field.invalidMsg,
           saving: field.saving,
           focused: field.focused,
           defaultValue: field.defaultValue,
