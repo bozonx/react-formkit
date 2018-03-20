@@ -102,17 +102,17 @@ export default function formkitConnect(config) {
       }
 
       _getInitialFieldState(field) {
-        const onChange = (event) => {
-          if (_.isString(event)) {
-            field.handleChange(event);
+        const onChange = (param) => {
+          if (_.isObject(param) && param.target) {
+            field.handleChange(param.target.value);
           }
           else {
-            field.handleChange(event.target.value);
+            field.handleChange(param);
           }
         };
 
         const fieldState = this._getFieldState(field);
-        fieldState.handleChange = onChange;
+        fieldState.handleChange = field.handleChange;
         fieldState.props.onChange = onChange;
 
         return fieldState;
