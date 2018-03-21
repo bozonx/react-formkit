@@ -13,7 +13,12 @@ export default function formkitConnect(config) {
         fields: {},
       };
 
-      // TODO: слушать обновления initalState
+
+      componentWillUpdate(nextProps) {
+        if (_.isEqual(nextProps.initialValues, this.props.initialValues)) return;
+
+        this._processInitialValues(nextProps);
+      }
 
       componentWillMount() {
         if (!config) return;
@@ -22,17 +27,16 @@ export default function formkitConnect(config) {
 
         // init form
         if (config.fields) {
-          //form.init(config.fields);
-          this.form.init(config.fields, config.validate);
+          const realValidate = (errors, values) => {
+            config.validate(errors, values, this.props);
+          };
+          this.form.init(config.fields, config.validate && realValidate);
         }
 
         // set initial state
         this.setState({ formState: this._getFormState() });
         this._initFields()
-          .then(() => {
-            // set initial values
-            this.form.setSavedValues(this.props.initialValues);
-          });
+          .then(() => this._processInitialValues(this.props));
 
         // update react state on each change
         this.form.on('anyChange', (data) => {
@@ -40,6 +44,16 @@ export default function formkitConnect(config) {
           this._updateFields();
           this.setState({ formState: this._getFormState() });
         });
+      }
+
+      _processInitialValues(props) {
+        let initialValues = props.initialValues;
+        if (config.mapInitialValues) {
+          initialValues = config.mapInitialValues(initialValues, props);
+        }
+
+        // set initial values
+        this.form.setSavedValues(initialValues);
       }
 
       _getFormState() {
