@@ -7,17 +7,19 @@ export default function formkitConnect(config) {
     return class extends React.Component {
       static contextTypes = Target.contextTypes;
 
-
       state = {
         formState: {},
         fields: {},
       };
 
+      getWrappedInstance() {
+        return this.refs.instance;
+      }
 
       componentWillUpdate(nextProps) {
         if (_.isEqual(nextProps.initialValues, this.props.initialValues)) return;
 
-        this._processInitialValues(nextProps);
+        this._updateSavedValues(nextProps);
       }
 
       componentWillMount() {
@@ -30,23 +32,42 @@ export default function formkitConnect(config) {
           const realValidate = (errors, values) => {
             config.validate(errors, values, this.props);
           };
-          this.form.init(config.fields, config.validate && realValidate);
+          const fieldsInitial = this._generateFieldsIntial(config.fields, this.props.initialValues);
+          this.form.init(fieldsInitial, config.validate && realValidate);
         }
 
         // set initial state
         this.setState({ formState: this._getFormState() });
-        this._initFields()
-          .then(() => this._processInitialValues(this.props));
+        this._initFields();
 
         // update react state on each change
-        this.form.on('anyChange', (data) => {
-          // TODO: обновлять только то что изменилось - see data.field
-          this._updateFields();
+        this.form.on('storage', (data) => {
+          this._updateField(data);
+          //this._updateFields();
           this.setState({ formState: this._getFormState() });
         });
       }
 
-      _processInitialValues(props) {
+      _generateFieldsIntial(fields, initialValues) {
+        const result = {};
+
+        if (_.isArray) {
+          _.each(fields, (fieldName) => {
+            const initial = _.get(initialValues, fieldName);
+            result[fieldName] = { initial };
+          });
+        }
+        else if (_.isPlainObject()) {
+          // TODO: !!!! support it
+        }
+        else {
+          throw new Error(`Incorrect type of fields param`);
+        }
+
+        return result;
+      }
+
+      _updateSavedValues(props) {
         let initialValues = props.initialValues;
         if (config.mapInitialValues) {
           initialValues = config.mapInitialValues(initialValues, props);
@@ -54,18 +75,6 @@ export default function formkitConnect(config) {
 
         // set initial values
         this.form.setSavedValues(initialValues);
-      }
-
-      _getFormState() {
-        return {
-          dirty: this.form.dirty,
-          touched: this.form.touched,
-          saving: this.form.saving,
-          submitting: this.form.submitting,
-          submitable: this.form.submitable,
-          valid: this.form.valid,
-          invalidMessages: this.form.invalidMessages,
-        };
       }
 
       _initFields() {
@@ -90,6 +99,21 @@ export default function formkitConnect(config) {
         return new Promise((resolve) => {
           this.setState({ fields }, resolve);
         });
+      }
+
+      _updateField(eventData) {
+        if (eventData.target !== 'field') return;
+
+        const fields = _.clone(this.state.fields);
+        const currentState = _.get(fields, eventData.field);
+        const field = _.get(this.form.fields, eventData.field);
+        const updatedField = _.defaultsDeep(this._getFieldState(field), currentState);
+
+        console.log(111111111, eventData.field, updatedField);
+
+        _.set(fields, eventData.field, updatedField);
+
+        this.setState({ fields });
       }
 
       _updateFields() {
@@ -132,18 +156,35 @@ export default function formkitConnect(config) {
         return fieldState;
       }
 
+      _getFormState() {
+        return {
+          values: this.form.values,
+          savedValues: this.form.savedValues,
+          editedValues: this.form.editedValues,
+          dirty: this.form.dirty,
+          touched: this.form.touched,
+          saving: this.form.saving,
+          submitting: this.form.submitting,
+          submittable: this.form.submittable,
+          valid: this.form.valid,
+          invalidMessages: this.form.invalidMessages,
+        };
+      }
+
       _getFieldState(field) {
         return {
           value: field.value,
+          savedValue: field.savedValue,
+          editedValue: field.editedValue,
           name: field.name,
-          path: field.path,
+          fullName: field.path,
           disabled: field.disabled,
           dirty: field.dirty,
           touched: field.touched,
           valid: field.valid,
-          // TODO: do it in formkit inside
-          error: (field.valid) ? null : field.invalidMsg,
+          error: field.invalidMsg,
           saving: field.saving,
+          savable: field.savable,
           focused: field.focused,
           defaultValue: field.defaultValue,
           props: {
@@ -172,14 +213,18 @@ export default function formkitConnect(config) {
 
 
       render() {
-        return <Target {...this.props}
+        return <Target ref="instance"
+                       {...this.props}
                        form={this.form}
                        fields={this.state.fields}
+                       values={this.state.formState.values}
+                       savedValues={this.state.formState.savedValues}
+                       editedValues={this.state.formState.editedValues}
                        dirty={this.state.formState.dirty}
                        touched={this.state.formState.touched}
                        saving={this.state.formState.saving}
                        submitting={this.state.formState.submitting}
-                       submitable={this.state.formState.submitable}
+                       submittable={this.state.formState.submittable}
                        valid={this.state.formState.valid}
                        invalidMessages={this.state.formState.invalidMessages}
                        handleSubmit={this._handleSubmit} />;
