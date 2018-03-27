@@ -10,13 +10,14 @@ export default function formkitConnect(config) {
       state = {
         formState: {},
         fields: {},
+        inited: false,
       };
 
       getWrappedInstance() {
         return this.refs.instance;
       }
 
-      componentWillUpdate(nextProps) {
+      componentWillReceiveProps(nextProps) {
         if (_.isEqual(nextProps.initialValues, this.props.initialValues)) return;
 
         this._updateSavedValues(nextProps);
@@ -37,8 +38,12 @@ export default function formkitConnect(config) {
         }
 
         // set initial state
-        this.setState({ formState: this._getFormState() });
-        this._initFields();
+        Promise.all([
+          new Promise((resolve) => this.setState({ formState: this._getFormState() }, resolve)),
+          this._initFields(),
+        ])
+          // it needs for componentWillMount of underlying component receives form and field state in props
+          .then(() => this.setState({ inited: true }));
 
         // update react state on each change
         this.form.on('storage', (data) => {
@@ -46,6 +51,10 @@ export default function formkitConnect(config) {
           //this._updateFields();
           this.setState({ formState: this._getFormState() });
         });
+      }
+
+      componentWillUnmount() {
+        this.form.destroy();
       }
 
       _generateFieldsIntial(fields, initialValues) {
@@ -109,35 +118,33 @@ export default function formkitConnect(config) {
         const field = _.get(this.form.fields, eventData.field);
         const updatedField = _.defaultsDeep(this._getFieldState(field), currentState);
 
-        console.log(111111111, eventData.field, updatedField);
-
         _.set(fields, eventData.field, updatedField);
 
         this.setState({ fields });
       }
 
-      _updateFields() {
-        const fields = _.clone(this.state.fields);
-
-        const recursively = (container, path) => {
-          if (_.isPlainObject(container)) {
-            // go deeper
-            _.each(container, (field, name) => {
-              const curPath = _.trimStart(`${path}.${name}`, '.');
-              recursively(field, curPath);
-            });
-
-            return;
-          }
-
-          const currentState = _.get(fields, path);
-          _.set(fields, path, _.defaultsDeep(this._getFieldState(container), currentState));
-        };
-
-        recursively(this.form.fields, '');
-
-        this.setState({ fields });
-      }
+      // _updateFields() {
+      //   const fields = _.clone(this.state.fields);
+      //
+      //   const recursively = (container, path) => {
+      //     if (_.isPlainObject(container)) {
+      //       // go deeper
+      //       _.each(container, (field, name) => {
+      //         const curPath = _.trimStart(`${path}.${name}`, '.');
+      //         recursively(field, curPath);
+      //       });
+      //
+      //       return;
+      //     }
+      //
+      //     const currentState = _.get(fields, path);
+      //     _.set(fields, path, _.defaultsDeep(this._getFieldState(container), currentState));
+      //   };
+      //
+      //   recursively(this.form.fields, '');
+      //
+      //   this.setState({ fields });
+      // }
 
       _getInitialFieldState(field) {
         const onChange = (param) => {
@@ -213,21 +220,26 @@ export default function formkitConnect(config) {
 
 
       render() {
-        return <Target ref="instance"
-                       {...this.props}
-                       form={this.form}
-                       fields={this.state.fields}
-                       values={this.state.formState.values}
-                       savedValues={this.state.formState.savedValues}
-                       editedValues={this.state.formState.editedValues}
-                       dirty={this.state.formState.dirty}
-                       touched={this.state.formState.touched}
-                       saving={this.state.formState.saving}
-                       submitting={this.state.formState.submitting}
-                       submittable={this.state.formState.submittable}
-                       valid={this.state.formState.valid}
-                       invalidMessages={this.state.formState.invalidMessages}
-                       handleSubmit={this._handleSubmit} />;
+        if (this.state.inited) {
+          return <Target ref="instance"
+                         {...this.props}
+                         form={this.form}
+                         fields={this.state.fields}
+                         values={this.state.formState.values}
+                         savedValues={this.state.formState.savedValues}
+                         editedValues={this.state.formState.editedValues}
+                         dirty={this.state.formState.dirty}
+                         touched={this.state.formState.touched}
+                         saving={this.state.formState.saving}
+                         submitting={this.state.formState.submitting}
+                         submittable={this.state.formState.submittable}
+                         valid={this.state.formState.valid}
+                         invalidMessages={this.state.formState.invalidMessages}
+                         handleSubmit={this._handleSubmit} />;
+        }
+        else {
+          return <span />;
+        }
       }
     }
   }
