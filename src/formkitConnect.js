@@ -47,8 +47,8 @@ export default function formkitConnect(config) {
 
         // update react state on each change
         this.form.on('storage', (data) => {
-          this._updateField(data);
-          //this._updateFields();
+          //this._updateField(data);
+          this._updateFields();
           this.setState({ formState: this._getFormState() });
         });
       }
@@ -110,6 +110,7 @@ export default function formkitConnect(config) {
         });
       }
 
+      // TODO: из за этого получается рассогласование полей если одно поле меняет другое
       _updateField(eventData) {
         if (eventData.target !== 'field') return;
 
@@ -123,28 +124,28 @@ export default function formkitConnect(config) {
         this.setState({ fields });
       }
 
-      // _updateFields() {
-      //   const fields = _.clone(this.state.fields);
-      //
-      //   const recursively = (container, path) => {
-      //     if (_.isPlainObject(container)) {
-      //       // go deeper
-      //       _.each(container, (field, name) => {
-      //         const curPath = _.trimStart(`${path}.${name}`, '.');
-      //         recursively(field, curPath);
-      //       });
-      //
-      //       return;
-      //     }
-      //
-      //     const currentState = _.get(fields, path);
-      //     _.set(fields, path, _.defaultsDeep(this._getFieldState(container), currentState));
-      //   };
-      //
-      //   recursively(this.form.fields, '');
-      //
-      //   this.setState({ fields });
-      // }
+      _updateFields() {
+        const fields = _.clone(this.state.fields);
+
+        const recursively = (container, path) => {
+          if (_.isPlainObject(container)) {
+            // go deeper
+            _.each(container, (field, name) => {
+              const curPath = _.trimStart(`${path}.${name}`, '.');
+              recursively(field, curPath);
+            });
+
+            return;
+          }
+
+          const currentState = _.get(fields, path);
+          _.set(fields, path, _.defaultsDeep(this._getFieldState(container), currentState));
+        };
+
+        recursively(this.form.fields, '');
+
+        this.setState({ fields });
+      }
 
       _getInitialFieldState(field) {
         const onChange = (param) => {
