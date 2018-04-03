@@ -169,6 +169,7 @@ export default function formkitConnect(config) {
           values: this.form.values,
           savedValues: this.form.savedValues,
           editedValues: this.form.editedValues,
+          unsavedValues: this.form.unsavedValues,
           dirty: this.form.dirty,
           touched: this.form.touched,
           saving: this.form.saving,
