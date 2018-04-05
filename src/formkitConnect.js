@@ -1,5 +1,6 @@
 import React from 'react';
 import _ from 'lodash';
+import helpers from './helpers';
 
 
 export default function formkitConnect(config) {
@@ -33,13 +34,13 @@ export default function formkitConnect(config) {
           const realValidate = (errors, values) => {
             config.validate(errors, values, this.props);
           };
-          const fieldsInitial = this._generateFieldsIntial(config.fields, this.props.initialValues);
+          const fieldsInitial = helpers.generateFieldsInitParams(config.fields, this.props.initialValues);
           this.form.init(fieldsInitial, config.validate && realValidate);
         }
 
         // set initial state
         Promise.all([
-          new Promise((resolve) => this.setState({ formState: this._getFormState() }, resolve)),
+          new Promise((resolve) => this.setState({ formState:  helpers.makeFormState() }, resolve)),
           this._initFields(),
         ])
           // it needs for componentWillMount of underlying component receives form and field state in props
@@ -49,31 +50,12 @@ export default function formkitConnect(config) {
         this.form.on('storage', (data) => {
           //this._updateField(data);
           this._updateFields();
-          this.setState({ formState: this._getFormState() });
+          this.setState({ formState: helpers.makeFormState() });
         });
       }
 
       componentWillUnmount() {
         this.form.destroy();
-      }
-
-      _generateFieldsIntial(fields, initialValues) {
-        const result = {};
-
-        if (_.isArray) {
-          _.each(fields, (fieldName) => {
-            const initial = _.get(initialValues, fieldName);
-            result[fieldName] = { initial };
-          });
-        }
-        else if (_.isPlainObject()) {
-          // TODO: !!!! support it
-        }
-        else {
-          throw new Error(`Incorrect type of fields param`);
-        }
-
-        return result;
       }
 
       _updateSavedValues(props) {
@@ -100,7 +82,7 @@ export default function formkitConnect(config) {
             return;
           }
 
-          _.set(fields, path, this._getInitialFieldState(container));
+          _.set(fields, path, helpers.generateInitialStateOfField(container));
         };
 
         recursively(this.form.fields, '');
@@ -117,7 +99,7 @@ export default function formkitConnect(config) {
         const fields = _.clone(this.state.fields);
         const currentState = _.get(fields, eventData.field);
         const field = _.get(this.form.fields, eventData.field);
-        const updatedField = _.defaultsDeep(this._getFieldState(field), currentState);
+        const updatedField = _.defaultsDeep(helpers.makeFieldState(field), currentState);
 
         _.set(fields, eventData.field, updatedField);
 
@@ -139,69 +121,12 @@ export default function formkitConnect(config) {
           }
 
           const currentState = _.get(fields, path);
-          _.set(fields, path, _.defaultsDeep(this._getFieldState(container), currentState));
+          _.set(fields, path, _.defaultsDeep(helpers.makeFieldState(container), currentState));
         };
 
         recursively(this.form.fields, '');
 
         this.setState({ fields });
-      }
-
-      _getInitialFieldState(field) {
-        const onChange = (param) => {
-          if (_.isObject(param) && param.target) {
-            field.handleChange(param.target.value);
-          }
-          else {
-            field.handleChange(param);
-          }
-        };
-
-        const fieldState = this._getFieldState(field);
-        fieldState.handleChange = field.handleChange;
-        fieldState.props.onChange = onChange;
-
-        return fieldState;
-      }
-
-      _getFormState() {
-        return {
-          values: this.form.values,
-          savedValues: this.form.savedValues,
-          editedValues: this.form.editedValues,
-          unsavedValues: this.form.unsavedValues,
-          dirty: this.form.dirty,
-          touched: this.form.touched,
-          saving: this.form.saving,
-          submitting: this.form.submitting,
-          submittable: this.form.submittable,
-          valid: this.form.valid,
-          invalidMessages: this.form.invalidMessages,
-        };
-      }
-
-      _getFieldState(field) {
-        return {
-          value: field.value,
-          savedValue: field.savedValue,
-          editedValue: field.editedValue,
-          name: field.name,
-          fullName: field.path,
-          disabled: field.disabled,
-          dirty: field.dirty,
-          touched: field.touched,
-          valid: field.valid,
-          error: field.invalidMsg,
-          saving: field.saving,
-          savable: field.savable,
-          focused: field.focused,
-          defaultValue: field.defaultValue,
-          props: {
-            name: field.name,
-            value: field.value,
-            disabled: field.disabled,
-          }
-        }
       }
 
       _instantiateForm() {
