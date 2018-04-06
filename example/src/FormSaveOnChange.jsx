@@ -5,15 +5,15 @@ import formkit from 'formkit';
 import formkitConnect from 'react-formkit';
 
 
+// name of fields which will be used in form
 const fields = [
   'userName',
   'aboutMe',
   'sendMeEmails',
 ];
-
+// validating rules for fields
 const validate = (errors, values) => {
   if (!values.userName) errors.userName = 'Required';
-  if (!values.aboutMe) errors.aboutMe = 'Required';
 };
 
 
@@ -35,7 +35,7 @@ export default class DriverForm extends React.Component {
   render() {
     const {
       submitting,
-      submitable,
+      submittable,
       handleSubmit,
       fields: {
         userName,
@@ -50,6 +50,7 @@ export default class DriverForm extends React.Component {
         <div>
           <input type="text"
                  { ...userName.props } />
+          {userName.error && <div>{userName.error}</div>}
         </div>
 
         <div>
@@ -65,7 +66,7 @@ export default class DriverForm extends React.Component {
 
         <div>
           <button type="submit"
-                  disabled={submitable}>
+                  disabled={submittable}>
             {(submitting) ?
               'Submitting ...'
             :
