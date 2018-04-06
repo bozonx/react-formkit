@@ -3,6 +3,7 @@
 Типовая форма выглядит таким образом:
 
     import React from 'react';
+    import PropTypes from 'prop-types';
     import formkit from 'formkit';
     import formkitConnect from 'react-formkit';
     
@@ -12,8 +13,8 @@
     ];
     
     const validate = (errors, values) => {
-      if (!first_name) errors.first_name = 'Required';
-      if (!last_name) errors.last_name = 'Required';
+      if (!values.first_name) errors.first_name = 'Required';
+      if (!values.last_name) errors.last_name = 'Required';
     };
     
     @(formkitConnect({
@@ -22,7 +23,18 @@
       validate,
     }))
     export default class DriverForm extends React.Component {
+      static propTypes = {
+        onSubmit: PropTypes.func,
+      };
       
+      componentWillMount() {
+        // connecting form's submit with onSubmit prop
+        this.props.form.onSubmit(({ values }) => this.props.onSubmit(values));
+      }
+      
+      render() {
+        
+      }
     }
     
 Для для удобства в этом примере используются декторатор `@(formkitConnect({ ... }))`.
