@@ -39,19 +39,19 @@ export default {
     return fieldState;
   },
 
-  makeFormState() {
+  makeFormState(form) {
     return {
-      values: this.form.values,
-      savedValues: this.form.savedValues,
-      editedValues: this.form.editedValues,
-      unsavedValues: this.form.unsavedValues,
-      dirty: this.form.dirty,
-      touched: this.form.touched,
-      saving: this.form.saving,
-      submitting: this.form.submitting,
-      submittable: this.form.submittable,
-      valid: this.form.valid,
-      invalidMessages: this.form.invalidMessages,
+      values: form.values,
+      savedValues: form.savedValues,
+      editedValues: form.editedValues,
+      unsavedValues: form.unsavedValues,
+      dirty: form.dirty,
+      touched: form.touched,
+      saving: form.saving,
+      submitting: form.submitting,
+      submittable: form.submittable,
+      valid: form.valid,
+      invalidMessages: form.invalidMessages,
     };
   },
 

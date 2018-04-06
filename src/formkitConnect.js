@@ -11,7 +11,7 @@ export default function formkitConnect(config) {
       state = {
         formState: {},
         fields: {},
-        inited: false,
+        wasStateInited: false,
       };
 
       getWrappedInstance() {
@@ -40,17 +40,17 @@ export default function formkitConnect(config) {
 
         // set initial state
         Promise.all([
-          new Promise((resolve) => this.setState({ formState:  helpers.makeFormState() }, resolve)),
+          new Promise((resolve) => this.setState({ formState:  helpers.makeFormState(this.form) }, resolve)),
           this._initFields(),
         ])
           // it needs for componentWillMount of underlying component receives form and field state in props
-          .then(() => this.setState({ inited: true }));
+          .then(() => this.setState({ wasStateInited: true }));
 
         // update react state on each change
         this.form.on('storage', (data) => {
           //this._updateField(data);
           this._updateFields();
-          this.setState({ formState: helpers.makeFormState() });
+          this.setState({ formState: helpers.makeFormState(this.form) });
         });
       }
 
@@ -147,7 +147,7 @@ export default function formkitConnect(config) {
 
 
       render() {
-        if (this.state.inited) {
+        if (this.state.wasStateInited) {
           return <Target ref="instance"
                          {...this.props}
                          form={this.form}
