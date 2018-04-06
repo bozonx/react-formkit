@@ -32,7 +32,7 @@ export default {
       }
     };
 
-    const fieldState = helpers.makeFieldState(field);
+    const fieldState = this.makeFieldState(field);
     fieldState.handleChange = field.handleChange;
     fieldState.props.onChange = onChange;
 
