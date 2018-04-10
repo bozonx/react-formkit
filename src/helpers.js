@@ -1,7 +1,7 @@
-import _ from 'lodash';
+const _ = require('lodash');
 
 
-export default {
+module.exports = {
 
   generateFieldsInitParams(fields, initialValues) {
     const result = {};

@@ -2,7 +2,7 @@ const path = require('path');
 
 
 module.exports = {
-  entry: './src/index',
+  entry: './src/formkitConnect.js',
   output: {
     path: path.resolve(__dirname, 'dist'),
     library: 'ReactFormKit',

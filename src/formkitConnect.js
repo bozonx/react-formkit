@@ -1,9 +1,9 @@
-import React from 'react';
-import _ from 'lodash';
-import helpers from './helpers';
+const React = require('react');
+const _ = require('lodash');
+const helpers = require('./helpers');
 
 
-export default function formkitConnect(config) {
+module.exports = function formkitConnect(config) {
   return function decorator(Target) {
     return class extends React.Component {
       static contextTypes = Target.contextTypes;
@@ -171,4 +171,4 @@ export default function formkitConnect(config) {
     }
   }
 
-}
+};
