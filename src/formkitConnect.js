@@ -155,6 +155,7 @@ module.exports = function formkitConnect(config) {
                          values={this.state.formState.values}
                          savedValues={this.state.formState.savedValues}
                          editedValues={this.state.formState.editedValues}
+                         unsavedValues={this.state.formState.unsavedValues}
                          dirty={this.state.formState.dirty}
                          touched={this.state.formState.touched}
                          saving={this.state.formState.saving}
