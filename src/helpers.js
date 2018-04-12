@@ -31,11 +31,14 @@ module.exports = {
     if (_.isArray) {
       _.each(fields, (fieldName) => {
         const initial = _.get(initialValues, fieldName);
-        result[fieldName] = { initial };
+        // set field initial value to saved layer because it means value which was loaded from server.
+        result[fieldName] = { savedValue: initial };
       });
     }
     else if (_.isPlainObject()) {
+
       // TODO: !!!! support it
+
     }
     else {
       throw new Error(`Incorrect type of fields param`);
@@ -47,9 +50,11 @@ module.exports = {
   generateInitialStateOfField(field) {
     const onChange = (param) => {
       if (_.isObject(param) && param.target) {
+        // params means event
         field.handleChange(param.target.value);
       }
       else {
+        // means just value
         field.handleChange(param);
       }
     };
@@ -88,6 +93,7 @@ module.exports = {
       dirty: field.dirty,
       touched: field.touched,
       valid: field.valid,
+      // rename invalidMsg to error for more convenience
       error: field.invalidMsg,
       saving: field.saving,
       savable: field.savable,
