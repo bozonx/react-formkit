@@ -17,7 +17,7 @@ module.exports = {
         return;
       }
 
-      _.set(fields, path, helpers.generateInitialStateOfField(container));
+      _.set(fields, path, this.generateInitialStateOfField(container));
     };
 
     recursively(formFields, '');

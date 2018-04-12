@@ -21,9 +21,15 @@ module.exports = function formkitConnect(config) {
       }
 
       componentWillMount() {
-        if (!config) throw new Error(`You have to specify at least fields definition for formkit connector's config!`);
+        if (!config)
+          throw new Error(`You have to specify at least fields definition for formkit connector's config!`);
+        if (!config.fields)
+          throw new Error(`You have to specify fields definition for formkit connector's config!`);
+        if (config.validate && !_.isFunction(config.validate))
+          throw new Error(`validate callback has to be a function!`);
+
         // get instance of form
-        this._form = this._instantiateForm();
+        this._form = this._instantiateForm(config);
         // init form with specified fields and initial values
         this._initForm();
         // update react state on each change
@@ -44,30 +50,25 @@ module.exports = function formkitConnect(config) {
         return this.refs.instance;
       }
 
-      _instantiateForm() {
-
-        // TODO: review
-
-        if (config.getForm) {
-          //const form = config.getForm(this.props, this._reactInternalInstance._context);
+      _instantiateForm(connectorConfig) {
+        if (connectorConfig.getForm) {
           return config.getForm(this.props, this.context);
         }
-        else {
-          throw new Error(`You have to specify a form config or "getForm" callback`);
-        }
+
+        // require formkit if its config has specified or undefined
+        const formkit = require('formkit');
+
+        return formkit.newForm(connectorConfig.config);
       }
 
       _initForm() {
+        // validate wrapper needs to passing props to validate callback
+        const validateWrapper = (errors, values) => config.validate(errors, values, this.props);
+        const fieldsInitial = helpers.generateFieldsInitParams(config.fields, this.props.initialValues);
+
+        this._form.init(fieldsInitial, config.validate && validateWrapper);
 
         // TODO: review
-
-        if (config.fields) {
-          const realValidate = (errors, values) => {
-            config.validate(errors, values, this.props);
-          };
-          const fieldsInitial = helpers.generateFieldsInitParams(config.fields, this.props.initialValues);
-          this._form.init(fieldsInitial, config.validate && realValidate);
-        }
 
         // set initial state
         Promise.all([
