@@ -14,10 +14,6 @@ module.exports = function formkitConnect(config) {
         wasStateInited: false,
       };
 
-      getWrappedInstance() {
-        return this.refs.instance;
-      }
-
       componentWillReceiveProps(nextProps) {
         if (_.isEqual(nextProps.initialValues, this.props.initialValues)) return;
 
@@ -44,7 +40,27 @@ module.exports = function formkitConnect(config) {
         this.setState({ formState: helpers.makeFormState(this._form) });
       };
 
+      getWrappedInstance() {
+        return this.refs.instance;
+      }
+
+      _instantiateForm() {
+
+        // TODO: review
+
+        if (config.getForm) {
+          //const form = config.getForm(this.props, this._reactInternalInstance._context);
+          return config.getForm(this.props, this.context);
+        }
+        else {
+          throw new Error(`You have to specify a form config or "getForm" callback`);
+        }
+      }
+
       _initForm() {
+
+        // TODO: review
+
         if (config.fields) {
           const realValidate = (errors, values) => {
             config.validate(errors, values, this.props);
@@ -62,7 +78,17 @@ module.exports = function formkitConnect(config) {
           .then(() => this.setState({ wasStateInited: true }));
       }
 
+      _initFields() {
+        return new Promise((resolve) => {
+          const fields = helpers.fillFieldsState(this._form.fields);
+          this.setState({ fields }, resolve);
+        });
+      }
+
       _updateSavedValues(props) {
+
+        // TODO: review
+
         let initialValues = props.initialValues;
         if (config.mapInitialValues) {
           initialValues = config.mapInitialValues(initialValues, props);
@@ -70,13 +96,6 @@ module.exports = function formkitConnect(config) {
 
         // set initial values
         this._form.setSavedValues(initialValues);
-      }
-
-      _initFields() {
-        return new Promise((resolve) => {
-          const fields = helpers.fillFieldsState(this._form.fields);
-          this.setState({ fields }, resolve);
-        });
       }
 
       // TODO: из за этого получается рассогласование полей если одно поле меняет другое
@@ -114,19 +133,6 @@ module.exports = function formkitConnect(config) {
         recursively(this._form.fields, '');
 
         this.setState({ fields });
-      }
-
-      _instantiateForm() {
-
-        // TODO: review
-
-        if (config.getForm) {
-          //const form = config.getForm(this.props, this._reactInternalInstance._context);
-          return config.getForm(this.props, this.context);
-        }
-        else {
-          throw new Error(`You have to specify a form config or "getForm" callback`);
-        }
       }
 
       _handleSubmit = (event) => {
