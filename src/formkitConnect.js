@@ -25,27 +25,11 @@ module.exports = function formkitConnect(config) {
       }
 
       componentWillMount() {
-        if (!config) return;
-
+        if (!config) throw new Error(`You have to specify at least fields definition for formkit connector's config!`);
+        // get instance of form
         this.form = this._instantiateForm();
-
-        // init form
-        if (config.fields) {
-          const realValidate = (errors, values) => {
-            config.validate(errors, values, this.props);
-          };
-          const fieldsInitial = helpers.generateFieldsInitParams(config.fields, this.props.initialValues);
-          this.form.init(fieldsInitial, config.validate && realValidate);
-        }
-
-        // set initial state
-        Promise.all([
-          new Promise((resolve) => this.setState({ formState:  helpers.makeFormState(this.form) }, resolve)),
-          this._initFields(),
-        ])
-          // it needs for componentWillMount of underlying component receives form and field state in props
-          .then(() => this.setState({ wasStateInited: true }));
-
+        // init form with specified fields and initial values
+        this._initForm();
         // update react state on each change
         this.form.on('storage', this.handleStorageChange);
       }
@@ -59,6 +43,24 @@ module.exports = function formkitConnect(config) {
         this._updateFields();
         this.setState({ formState: helpers.makeFormState(this.form) });
       };
+
+      _initForm() {
+        if (config.fields) {
+          const realValidate = (errors, values) => {
+            config.validate(errors, values, this.props);
+          };
+          const fieldsInitial = helpers.generateFieldsInitParams(config.fields, this.props.initialValues);
+          this.form.init(fieldsInitial, config.validate && realValidate);
+        }
+
+        // set initial state
+        Promise.all([
+          new Promise((resolve) => this.setState({ formState:  helpers.makeFormState(this.form) }, resolve)),
+          this._initFields(),
+        ])
+        // it needs for componentWillMount of underlying component receives form and field state in props
+          .then(() => this.setState({ wasStateInited: true }));
+      }
 
       _updateSavedValues(props) {
         let initialValues = props.initialValues;
