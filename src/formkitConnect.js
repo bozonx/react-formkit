@@ -41,6 +41,9 @@ module.exports = function formkitConnect(config) {
       }
 
       handleStorageChange = (data) => {
+
+        // TODO: review
+
         //this._updateField(data);
         this._updateFields();
         this.setState({ formState: helpers.makeFormState(this._form) });
@@ -73,18 +76,13 @@ module.exports = function formkitConnect(config) {
       }
 
       _initState() {
-        Promise.all([
-          new Promise((resolve) => {
-            const formState = helpers.makeFormState(this._form);
-            this.setState({ formState }, resolve);
-          }),
-          new Promise((resolve) => {
-            const fields = helpers.fillFieldsState(this._form.fields);
-            this.setState({ fields }, resolve);
-          }),
-        ])
+        const formState = helpers.makeFormState(this._form);
+        const fields = helpers.fillFieldsState(this._form.fields);
+
+        this.setState({ formState, fields }, () => {
           // it needs for componentWillMount of underlying component receives form and field state in props
-          .then(() => this.setState({ wasStateInited: true }));
+          this.setState({ wasStateInited: true });
+        });
       }
 
       _updateSavedValues(props) {
