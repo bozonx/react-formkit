@@ -27,21 +27,21 @@ module.exports = function formkitConnect(config) {
       componentWillMount() {
         if (!config) throw new Error(`You have to specify at least fields definition for formkit connector's config!`);
         // get instance of form
-        this.form = this._instantiateForm();
+        this._form = this._instantiateForm();
         // init form with specified fields and initial values
         this._initForm();
         // update react state on each change
-        this.form.on('storage', this.handleStorageChange);
+        this._form.on('storage', this.handleStorageChange);
       }
 
       componentWillUnmount() {
-        this.form.destroy();
+        this._form.destroy();
       }
 
       handleStorageChange = (data) => {
         //this._updateField(data);
         this._updateFields();
-        this.setState({ formState: helpers.makeFormState(this.form) });
+        this.setState({ formState: helpers.makeFormState(this._form) });
       };
 
       _initForm() {
@@ -50,12 +50,12 @@ module.exports = function formkitConnect(config) {
             config.validate(errors, values, this.props);
           };
           const fieldsInitial = helpers.generateFieldsInitParams(config.fields, this.props.initialValues);
-          this.form.init(fieldsInitial, config.validate && realValidate);
+          this._form.init(fieldsInitial, config.validate && realValidate);
         }
 
         // set initial state
         Promise.all([
-          new Promise((resolve) => this.setState({ formState:  helpers.makeFormState(this.form) }, resolve)),
+          new Promise((resolve) => this.setState({ formState:  helpers.makeFormState(this._form) }, resolve)),
           this._initFields(),
         ])
         // it needs for componentWillMount of underlying component receives form and field state in props
@@ -69,12 +69,12 @@ module.exports = function formkitConnect(config) {
         }
 
         // set initial values
-        this.form.setSavedValues(initialValues);
+        this._form.setSavedValues(initialValues);
       }
 
       _initFields() {
         return new Promise((resolve) => {
-          const fields = helpers.fillFieldsState(this.form.fields);
+          const fields = helpers.fillFieldsState(this._form.fields);
           this.setState({ fields }, resolve);
         });
       }
@@ -85,7 +85,7 @@ module.exports = function formkitConnect(config) {
 
         const fields = _.clone(this.state.fields);
         const currentState = _.get(fields, eventData.field);
-        const field = _.get(this.form.fields, eventData.field);
+        const field = _.get(this._form.fields, eventData.field);
         const updatedField = _.defaultsDeep(helpers.makeFieldState(field), currentState);
 
         _.set(fields, eventData.field, updatedField);
@@ -111,7 +111,7 @@ module.exports = function formkitConnect(config) {
           _.set(fields, path, _.defaultsDeep(helpers.makeFieldState(container), currentState));
         };
 
-        recursively(this.form.fields, '');
+        recursively(this._form.fields, '');
 
         this.setState({ fields });
       }
@@ -132,7 +132,7 @@ module.exports = function formkitConnect(config) {
       _handleSubmit = (event) => {
         event.preventDefault();
         event.stopPropagation();
-        this.form.handleSubmit();
+        this._form.handleSubmit();
       };
 
 
@@ -140,7 +140,7 @@ module.exports = function formkitConnect(config) {
         if (this.state.wasStateInited) {
           return <Target ref="instance"
                          {...this.props}
-                         form={this.form}
+                         form={this._form}
                          fields={this.state.fields}
                          values={this.state.formState.values}
                          savedValues={this.state.formState.savedValues}
