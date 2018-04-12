@@ -26,25 +26,23 @@ module.exports = {
   },
 
   generateFieldsInitParams(fields, initialValues) {
-    const result = {};
-
     if (_.isArray) {
+      // convert array to schema notation
+      const schema = {};
+
       _.each(fields, (fieldName) => {
-        const initial = _.get(initialValues, fieldName);
+        const initialValue = _.get(initialValues, fieldName);
         // set field initial value to saved layer because it means value which was loaded from server.
-        result[fieldName] = { savedValue: initial };
+        schema[fieldName] = { savedValue: initialValue };
       });
+
+      return schema;
     }
     else if (_.isPlainObject()) {
-
-      // TODO: !!!! support it
-
-    }
-    else {
-      throw new Error(`Incorrect type of fields param`);
+      return this._generateFieldSchema(fields, initialValues);
     }
 
-    return result;
+    throw new Error(`Incorrect type of fields param`);
   },
 
   generateInitialStateOfField(field) {
@@ -106,5 +104,30 @@ module.exports = {
       }
     }
   },
+
+  _generateFieldSchema(fields, initialValues) {
+    const schema = {};
+
+    // TODO: приводим fields к нотации - "parent.field"
+    // TODO: проходимся по initialValues - и вставляем значения в поля
+
+    _.each(fields, (field, fieldName) => {
+      const initialValue = _.get(initialValues, fieldName);
+      // set field initial value to saved layer because it means value which was loaded from server.
+      result[fieldName] = {
+        ...field,
+        savedValue: initialValue
+      };
+      // TODO: recusively
+      // TODO: может быть как рекурсивно, так и в виде "parent.field"
+
+    });
+
+    return schema;
+  },
+
+  _eachField() {
+
+  }
 
 };
