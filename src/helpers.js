@@ -105,11 +105,21 @@ module.exports = {
     }
   },
 
-  _generateFieldSchema(fields, initialValues) {
+  _generateFieldSchema(rawSchema, initialValues) {
     const schema = {};
 
-    // TODO: приводим fields к нотации - "parent.field"
-    // TODO: проходимся по initialValues - и вставляем значения в поля
+    // convert fields to notation "parent.field"
+    this._eachField(rawSchema, (field, path) => schema[path] = field);
+
+    // set saved values to field
+    this._eachValue(initialValues, (initialValue, path) => {
+      if (!schema[path]) return;
+
+      schema[path] = {
+        ...schema[path],
+        savedValue: initialValue
+      };
+    });
 
     _.each(fields, (field, fieldName) => {
       const initialValue = _.get(initialValues, fieldName);
@@ -127,7 +137,11 @@ module.exports = {
   },
 
   _eachField() {
+    // TODO: recusively
+  },
 
-  }
+  _eachValue() {
+    // TODO: recusively
+  },
 
 };
