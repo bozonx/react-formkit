@@ -68,22 +68,23 @@ module.exports = function formkitConnect(config) {
 
         this._form.init(fieldsInitial, config.validate && validateWrapper);
 
-        // TODO: review
-
-        // set initial state
-        Promise.all([
-          new Promise((resolve) => this.setState({ formState:  helpers.makeFormState(this._form) }, resolve)),
-          this._initFields(),
-        ])
-        // it needs for componentWillMount of underlying component receives form and field state in props
-          .then(() => this.setState({ wasStateInited: true }));
+        // set state of form and fields
+        this._initState();
       }
 
-      _initFields() {
-        return new Promise((resolve) => {
-          const fields = helpers.fillFieldsState(this._form.fields);
-          this.setState({ fields }, resolve);
-        });
+      _initState() {
+        Promise.all([
+          new Promise((resolve) => {
+            const formState = helpers.makeFormState(this._form);
+            this.setState({ formState }, resolve);
+          }),
+          new Promise((resolve) => {
+            const fields = helpers.fillFieldsState(this._form.fields);
+            this.setState({ fields }, resolve);
+          }),
+        ])
+          // it needs for componentWillMount of underlying component receives form and field state in props
+          .then(() => this.setState({ wasStateInited: true }));
       }
 
       _updateSavedValues(props) {
