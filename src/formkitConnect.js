@@ -47,16 +47,18 @@ module.exports = function formkitConnect(config) {
           .then(() => this.setState({ wasStateInited: true }));
 
         // update react state on each change
-        this.form.on('storage', (data) => {
-          //this._updateField(data);
-          this._updateFields();
-          this.setState({ formState: helpers.makeFormState(this.form) });
-        });
+        this.form.on('storage', this.handleStorageChange);
       }
 
       componentWillUnmount() {
         this.form.destroy();
       }
+
+      handleStorageChange = (data) => {
+        //this._updateField(data);
+        this._updateFields();
+        this.setState({ formState: helpers.makeFormState(this.form) });
+      };
 
       _updateSavedValues(props) {
         let initialValues = props.initialValues;
@@ -69,25 +71,8 @@ module.exports = function formkitConnect(config) {
       }
 
       _initFields() {
-        const fields = {};
-
-        const recursively = (container, path) => {
-          if (_.isPlainObject(container)) {
-            // go deeper
-            _.each(container, (field, name) => {
-              const curPath = _.trimStart(`${path}.${name}`, '.');
-              recursively(field, curPath);
-            });
-
-            return;
-          }
-
-          _.set(fields, path, helpers.generateInitialStateOfField(container));
-        };
-
-        recursively(this.form.fields, '');
-
         return new Promise((resolve) => {
+          const fields = helpers.fillFieldsState(this.form.fields);
           this.setState({ fields }, resolve);
         });
       }
@@ -130,6 +115,9 @@ module.exports = function formkitConnect(config) {
       }
 
       _instantiateForm() {
+
+        // TODO: review
+
         if (config.getForm) {
           //const form = config.getForm(this.props, this._reactInternalInstance._context);
           return config.getForm(this.props, this.context);

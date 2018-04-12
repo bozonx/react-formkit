@@ -3,6 +3,28 @@ const _ = require('lodash');
 
 module.exports = {
 
+  fillFieldsState(formFields) {
+    const fields = {};
+
+    const recursively = (container, path) => {
+      if (_.isPlainObject(container)) {
+        // go deeper
+        _.each(container, (field, name) => {
+          const curPath = _.trimStart(`${path}.${name}`, '.');
+          recursively(field, curPath);
+        });
+
+        return;
+      }
+
+      _.set(fields, path, helpers.generateInitialStateOfField(container));
+    };
+
+    recursively(formFields, '');
+
+    return fields;
+  },
+
   generateFieldsInitParams(fields, initialValues) {
     const result = {};
 
