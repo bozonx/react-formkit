@@ -26,23 +26,31 @@ module.exports = {
   },
 
   generateFieldsInitParams(fields, initialValues) {
+    const schema = {};
+
     if (_.isArray) {
       // convert array to schema notation
-      const schema = {};
-
       _.each(fields, (fieldName) => {
         const initialValue = _.get(initialValues, fieldName);
         // set field initial value to saved layer because it means value which was loaded from server.
         schema[fieldName] = { savedValue: initialValue };
       });
-
-      return schema;
     }
     else if (_.isPlainObject()) {
-      return this._generateFieldSchema(fields, initialValues);
+      this._eachField(fields, (field, path) => {
+        const initialValue = _.get(initialValues, path);
+        schema[path] = {
+          ...field,
+          // set field initial value to saved layer because it means value which was loaded from server.
+          savedValue: initialValue,
+        };
+      });
+    }
+    else {
+      throw new Error(`Incorrect type of fields param`);
     }
 
-    throw new Error(`Incorrect type of fields param`);
+    return schema;
   },
 
   generateInitialStateOfField(field) {
@@ -104,43 +112,24 @@ module.exports = {
       }
     }
   },
-
-  _generateFieldSchema(rawSchema, initialValues) {
-    const schema = {};
-
-    // convert fields to notation "parent.field"
-    this._eachField(rawSchema, (field, path) => schema[path] = field);
-
-    // set saved values to field
-    this._eachValue(initialValues, (initialValue, path) => {
-      if (!schema[path]) return;
-
-      schema[path] = {
-        ...schema[path],
-        savedValue: initialValue
-      };
-    });
-
-    _.each(fields, (field, fieldName) => {
-      const initialValue = _.get(initialValues, fieldName);
-      // set field initial value to saved layer because it means value which was loaded from server.
-      result[fieldName] = {
-        ...field,
-        savedValue: initialValue
-      };
-      // TODO: recusively
-      // TODO: может быть как рекурсивно, так и в виде "parent.field"
-
-    });
-
-    return schema;
-  },
+  //
+  // _generateFieldSchema(rawSchema, initialValues) {
+  //   const schema = {};
+  //
+  //   // convert fields to notation "parent.field"
+  //   this._eachField(rawSchema, (field, path) => {
+  //     const initialValue = _.get(initialValues, path);
+  //     schema[path] = {
+  //       ...field,
+  //       // set field initial value to saved layer because it means value which was loaded from server.
+  //       savedValue: initialValue
+  //     };
+  //   });
+  //
+  //   return schema;
+  // },
 
   _eachField() {
-    // TODO: recusively
-  },
-
-  _eachValue() {
     // TODO: recusively
   },
 
