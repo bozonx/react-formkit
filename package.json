@@ -1,6 +1,6 @@
 {
   "name": "react-formkit",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "React connector to formkit.",
   "license": "MIT",
   "repository": "git@github.com:bozonx/react-formkit.git",
@@ -10,7 +10,7 @@
   "author": "Ivan Kozyrin <ipkozyrin@gmail.com>",
   "main": "src/index.js",
   "scripts": {
-    "test": "node_modules/.bin/jest --bail --config=jest-web.json",
+    "test": "node_modules/.bin/jest --config=jest-web.json",
     "snapshot": "node_modules/.bin/jest --config=jest-web.json -u $1",
     "build": "yarn test && yarn run build-web && yarn run build-web-min",
     "build-bundle": "NODE_ENV=development node_modules/.bin/webpack-cli --mode development --progress --config ./webpack.bundle.config.js",
