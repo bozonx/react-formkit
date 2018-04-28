@@ -120,23 +120,28 @@ module.exports = {
   _eachField(fields, cb) {
     const recursively = (container, path) => {
       // if it isn't field - it means container
-      if (!this._isField(container)) {
-        // go deeper
-        _.each(container, (field, name) => {
-          const curPath = _.trimStart(`${path}.${name}`, '.');
-          recursively(field, curPath);
-        });
+
+      if (this._isField(container)) {
+        cb(container, path);
 
         return;
       }
 
-      cb(container, path);
+      // go deeper
+      _.each(container, (field, name) => {
+        const curPath = _.trimStart(`${path}.${name}`, '.');
+        recursively(field, curPath);
+      });
     };
 
     recursively(fields, '');
   },
 
   _isField(container) {
+    if (_.isObject(container)) {
+      if (container.constructor.name === 'Field') return true;
+    }
+
     if (!_.isPlainObject(container)) return false;
 
     const lookingParams = [
