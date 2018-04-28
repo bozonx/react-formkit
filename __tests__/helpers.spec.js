@@ -90,7 +90,10 @@ describe('helpers', () => {
       }
     };
     const result = {
-      'parent.field1': { savedValue: 1},
+      'parent.field1': {
+        disabled: true,
+        savedValue: 1,
+      },
     };
 
     expect(helpers.generateFieldsInitParams(fields, initalValues)).toEqual(result);
@@ -108,7 +111,10 @@ describe('helpers', () => {
       }
     };
     const result = {
-      'parent.field1': { savedValue: 1},
+      'parent.field1': {
+        disabled: true,
+        savedValue: 1,
+      },
     };
 
     expect(helpers.generateFieldsInitParams(fields, initalValues)).toEqual(result);
