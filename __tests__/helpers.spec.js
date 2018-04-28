@@ -62,8 +62,56 @@ describe('helpers', () => {
     expect(funcResult).toEqual(result);
   });
 
-  it('generateFieldsInitParams', () => {
-    // TODO: !!!!
+  it('generateFieldsInitParams - fields as array', () => {
+    const fields = [ 'parent.field1' ];
+    const initalValues = {
+      parent: {
+        field1: 1,
+      }
+    };
+    const result = {
+      'parent.field1': { savedValue: 1},
+    };
+
+    expect(helpers.generateFieldsInitParams(fields, initalValues)).toEqual(result);
+  });
+
+  it('generateFieldsInitParams - object', () => {
+    const fields = {
+      parent: {
+        field1: {
+          disabled: true,
+        },
+      }
+    };
+    const initalValues = {
+      parent: {
+        field1: 1,
+      }
+    };
+    const result = {
+      'parent.field1': { savedValue: 1},
+    };
+
+    expect(helpers.generateFieldsInitParams(fields, initalValues)).toEqual(result);
+  });
+
+  it('generateFieldsInitParams - flat object', () => {
+    const fields = {
+      'parent.field1': {
+        disabled: true,
+      },
+    };
+    const initalValues = {
+      parent: {
+        field1: 1,
+      }
+    };
+    const result = {
+      'parent.field1': { savedValue: 1},
+    };
+
+    expect(helpers.generateFieldsInitParams(fields, initalValues)).toEqual(result);
   });
 
   it('generateInitialStateOfField and makeFieldState', () => {
