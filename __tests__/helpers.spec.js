@@ -69,12 +69,11 @@ describe('helpers', () => {
       editedValue: 1,
       error: 'msg',
       focused: true,
-      fullName: 'parent.field1',
       handleChange: field.handleChange,
-      name: 'field1',
+      name: 'parent.field1',
       props: {
         disabled: false,
-        name: 'field1',
+        name: 'parent.field1',
         onChange: () => {},
         value: 1
       },
