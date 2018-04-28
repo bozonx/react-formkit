@@ -6,24 +6,9 @@ module.exports = {
   fillFieldsState(formFields) {
     const fields = {};
 
-    // TODO: use each field
-
-    const recursively = (container, path) => {
-      // if it isn't field - it means container
-      if (_.isPlainObject(container) && !container.name) {
-        // go deeper
-        _.each(container, (field, name) => {
-          const curPath = _.trimStart(`${path}.${name}`, '.');
-          recursively(field, curPath);
-        });
-
-        return;
-      }
-
-      _.set(fields, path, this.generateInitialStateOfField(container));
-    };
-
-    recursively(formFields, '');
+    this._eachField(formFields, (field, path) => {
+      _.set(fields, path, this.generateInitialStateOfField(field));
+    });
 
     return fields;
   },
