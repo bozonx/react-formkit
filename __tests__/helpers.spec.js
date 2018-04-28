@@ -5,7 +5,7 @@ const testField = {
   savedValue: 2,
   editedValue: 1,
   name: 'field1',
-  path: 'parent.field1',
+  fullName: 'parent.field1',
   disabled: false,
   dirty: true,
   touched: true,

@@ -82,7 +82,7 @@ module.exports = {
       savedValue: field.savedValue,
       editedValue: field.editedValue,
       // use full name as name like - 'parent.child'
-      name: field.path,
+      name: field.fullName,
       disabled: field.disabled,
       dirty: field.dirty,
       touched: field.touched,
@@ -94,7 +94,7 @@ module.exports = {
       focused: field.focused,
       defaultValue: field.defaultValue,
       props: {
-        name: field.path,
+        name: field.fullName,
         value: field.value,
         disabled: field.disabled,
       }
