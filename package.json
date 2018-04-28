@@ -1,6 +1,6 @@
 {
   "name": "react-formkit",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "React connector to formkit.",
   "license": "MIT",
   "repository": "git@github.com:bozonx/react-formkit.git",
@@ -24,7 +24,7 @@
     "babel-preset-env": "^1.6.1",
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-2": "^6.24.1",
-    "formkit": "^1.0.2",
+    "formkit": "^1.0.3",
     "lodash": "^4.17.5",
     "prop-types": "^15.6.1",
     "react": "^16.3.1",

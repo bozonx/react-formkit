@@ -2344,9 +2344,9 @@ form-data@~2.3.1:
     combined-stream "1.0.6"
     mime-types "^2.1.12"
 
-formkit@^1.0.2:
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/formkit/-/formkit-1.0.2.tgz#46e39beb2a9c42530998044f0e9cf76579f8bbbd"
+formkit@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.npmjs.org/formkit/-/formkit-1.0.3.tgz#6db8e82e56bd4f03f3c960def22e588b998a58e2"
   dependencies:
     eventemitter3 "^3.0.1"
     immutable "^3.8.2"

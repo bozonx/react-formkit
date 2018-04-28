@@ -1,6 +1,7 @@
 const React = require('react');
 const _ = require('lodash');
 const helpers = require('./helpers');
+const formkit = require('formkit');
 
 
 module.exports = function formkitConnect(config) {
@@ -57,9 +58,6 @@ module.exports = function formkitConnect(config) {
         if (connectorConfig.getForm) {
           return config.getForm(this.props, this.context);
         }
-
-        // require formkit if its config has specified or undefined
-        const formkit = require('formkit');
 
         return formkit.newForm(connectorConfig.config);
       }
