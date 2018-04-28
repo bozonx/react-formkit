@@ -84,7 +84,7 @@ module.exports = {
       submitting: form.submitting,
       submittable: form.submittable,
       valid: form.valid,
-      invalidMessages: form.invalidMessages,
+      errors: form.invalidMessages,
     };
   },
 

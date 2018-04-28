@@ -43,7 +43,7 @@ describe('helpers', () => {
     expect(helpers.fillFieldsState(formFields)).toBe(result);
   });
 
-  it.only('generateInitialStateOfField and makeFieldState', () => {
+  it('generateInitialStateOfField and makeFieldState', () => {
     const field = {
       value: 1,
       savedValue: 2,
@@ -88,6 +88,38 @@ describe('helpers', () => {
     const funcResult = helpers.generateInitialStateOfField(field);
     result.props.onChange = funcResult.props.onChange;
     expect(funcResult).toEqual(result);
+  });
+
+  it.only('makeFormState', () => {
+    const form = {
+      values: { field1: 1 },
+      savedValues: { field1: 2 },
+      editedValues: { field1: 1 },
+      unsavedValues: {},
+      dirty: true,
+      touched: true,
+      saving: true,
+      submitting: true,
+      submittable: true,
+      valid: true,
+      invalidMessages: { field1: 'err', },
+    };
+
+    const result = {
+      values: { field1: 1 },
+      savedValues: { field1: 2 },
+      editedValues: { field1: 1 },
+      unsavedValues: {},
+      dirty: true,
+      touched: true,
+      saving: true,
+      submitting: true,
+      submittable: true,
+      valid: true,
+      errors: { field1: 'err', },
+    };
+
+    expect(helpers.makeFormState(form)).toEqual(result);
   });
 
 });

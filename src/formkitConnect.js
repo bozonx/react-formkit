@@ -158,7 +158,7 @@ module.exports = function formkitConnect(config) {
                          submitting={this.state.formState.submitting}
                          submittable={this.state.formState.submittable}
                          valid={this.state.formState.valid}
-                         invalidMessages={this.state.formState.invalidMessages}
+                         errors={this.state.formState.errors}
                          handleSubmit={this._handleSubmit} />;
         }
         else {
