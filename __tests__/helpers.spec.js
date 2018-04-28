@@ -43,4 +43,52 @@ describe('helpers', () => {
     expect(helpers.fillFieldsState(formFields)).toBe(result);
   });
 
+  it.only('generateInitialStateOfField and makeFieldState', () => {
+    const field = {
+      value: 1,
+      savedValue: 2,
+      editedValue: 1,
+      name: 'field1',
+      path: 'parent.field1',
+      disabled: false,
+      dirty: true,
+      touched: true,
+      valid: false,
+      invalidMsg: 'msg',
+      saving: false,
+      savable: true,
+      focused: true,
+      defaultValue: 0,
+      handleChange: () => {},
+    };
+
+    const result = {
+      defaultValue: 0,
+      dirty: true,
+      disabled: false,
+      editedValue: 1,
+      error: 'msg',
+      focused: true,
+      fullName: 'parent.field1',
+      handleChange: field.handleChange,
+      name: 'field1',
+      props: {
+        disabled: false,
+        name: 'field1',
+        onChange: () => {},
+        value: 1
+      },
+      savable: true,
+      savedValue: 2,
+      saving: false,
+      touched: true,
+      valid: false,
+      value: 1
+    };
+
+    const funcResult = helpers.generateInitialStateOfField(field);
+    result.props.onChange = funcResult.props.onChange;
+    expect(funcResult).toEqual(result);
+  });
+
 });

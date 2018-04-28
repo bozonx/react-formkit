@@ -94,6 +94,7 @@ module.exports = {
       savedValue: field.savedValue,
       editedValue: field.editedValue,
       name: field.name,
+      // rename path to fullName
       fullName: field.path,
       disabled: field.disabled,
       dirty: field.dirty,
