@@ -125,7 +125,14 @@ module.exports = function formkitConnect(config) {
           }
 
           const currentState = _.get(fields, path);
-          _.set(fields, path, _.defaultsDeep(helpers.makeFieldState(container), currentState));
+
+          if (_.isUndefined(currentState)) {
+            _.set(fields, path, helpers.generateInitialStateOfField(container));
+          }
+          else {
+            _.set(fields, path, _.defaultsDeep(helpers.makeFieldState(container), currentState));
+          }
+
         };
 
         recursively(this._form.fields, '');
