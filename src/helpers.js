@@ -7,7 +7,8 @@ module.exports = {
     const fields = {};
 
     const recursively = (container, path) => {
-      if (_.isPlainObject(container)) {
+      // if it isn't field - it means container
+      if (_.isPlainObject(container) && !container.name) {
         // go deeper
         _.each(container, (field, name) => {
           const curPath = _.trimStart(`${path}.${name}`, '.');
