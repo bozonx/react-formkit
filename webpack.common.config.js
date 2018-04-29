@@ -5,7 +5,7 @@ module.exports = {
   entry: './src/formkitConnect.js',
   output: {
     path: path.resolve(__dirname, 'dist'),
-    library: 'ReactFormKit',
+    library: 'ReactFormkit',
     sourceMapFilename: '[file].map',
   },
   cache: false,
@@ -18,4 +18,9 @@ module.exports = {
       },
     ],
   },
+  // externals: {
+  //   'react': 'React',
+  //   'react-dom': 'ReactDom',
+  //   'prop-types': 'PropTypes',
+  // }
 };

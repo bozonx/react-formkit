@@ -8,14 +8,12 @@
     "node": ">=5.11.1"
   },
   "author": "Ivan Kozyrin <ipkozyrin@gmail.com>",
-  "main": "src/index.js",
+  "main": "dist/react-formkit.module.js",
   "scripts": {
-    "test": "node_modules/.bin/jest --config=jest-web.json",
-    "snapshot": "node_modules/.bin/jest --config=jest-web.json -u $1",
-    "build": "yarn test && yarn run build-web && yarn run build-web-min",
-    "build-bundle": "NODE_ENV=development node_modules/.bin/webpack-cli --mode development --progress --config ./webpack.bundle.config.js",
-    "build-web": "NODE_ENV=production node_modules/.bin/webpack-cli --mode production --progress --config ./webpack.web.config.js",
-    "build-web-min": "NODE_ENV=production node_modules/.bin/webpack-cli --mode production --progress --config ./webpack.web-min.config.js"
+    "test": "jest --config=jest-web.json",
+    "snapshot": "jest --config=jest-web.json -u $1",
+    "build": "yarn test && yarn run build-module",
+    "build-module": "webpack-cli  --mode development --progress --config ./webpack.module.config.js"
   },
   "dependencies": {
     "babel-core": "^6.26.0",
@@ -24,11 +22,11 @@
     "babel-preset-env": "^1.6.1",
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-2": "^6.24.1",
-    "formkit": "^1.0.3",
+    "formkit": "^1.0.4",
     "lodash": "^4.17.5",
     "prop-types": "^15.6.1",
-    "react": "^16.3.1",
-    "react-dom": "^16.3.1"
+    "react": "^15.5.4",
+    "react-dom": "^15.5.4"
   },
   "devDependencies": {
     "babel-jest": "^22.4.3",
