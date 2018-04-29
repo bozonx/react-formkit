@@ -149,25 +149,28 @@ module.exports = function formkitConnect(config) {
 
       render() {
         if (this.state.wasStateInited) {
-          return <Target ref="instance"
-                         {...this.props}
-                         form={this._form}
-                         fields={this.state.fields}
-                         values={this.state.formState.values}
-                         savedValues={this.state.formState.savedValues}
-                         editedValues={this.state.formState.editedValues}
-                         unsavedValues={this.state.formState.unsavedValues}
-                         dirty={this.state.formState.dirty}
-                         touched={this.state.formState.touched}
-                         saving={this.state.formState.saving}
-                         submitting={this.state.formState.submitting}
-                         submittable={this.state.formState.submittable}
-                         valid={this.state.formState.valid}
-                         errors={this.state.formState.errors}
-                         handleSubmit={this._handleSubmit} />;
+
+          return React.createElement(Target, {
+            ref: 'instance',
+            ...this.props,
+            form: this._form,
+            fields: this.state.fields,
+            values: this.state.formState.values,
+            savedValues: this.state.formState.savedValues,
+            editedValues: this.state.formState.editedValues,
+            unsavedValues: this.state.formState.unsavedValues,
+            dirty: this.state.formState.dirty,
+            touched: this.state.formState.touched,
+            saving: this.state.formState.saving,
+            submitting: this.state.formState.submitting,
+            submittable: this.state.formState.submittable,
+            valid: this.state.formState.valid,
+            errors: this.state.formState.errors,
+            handleSubmit: this._handleSubmit,
+          });
         }
         else {
-          return <span />;
+          return React.createElement('span');
         }
       }
     }

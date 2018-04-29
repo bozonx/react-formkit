@@ -18,9 +18,13 @@ module.exports = {
       },
     ],
   },
-  // externals: {
-  //   'react': 'React',
-  //   'react-dom': 'ReactDom',
-  //   'prop-types': 'PropTypes',
-  // }
+  externals: {
+    //'react': 'React',
+    //'react-dom': 'ReactDom',
+    //'prop-types': 'PropTypes',
+  },
+  resolve: {
+    modules: [path.resolve('./node_modules'), path.resolve('./src')],
+    extensions: ['.json', '.js']
+  },
 };
