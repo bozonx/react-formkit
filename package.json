@@ -1,6 +1,6 @@
 {
   "name": "react-formkit",
-  "version": "1.0.10",
+  "version": "1.0.11",
   "description": "React connector to formkit.",
   "license": "MIT",
   "repository": "git@github.com:bozonx/react-formkit.git",
@@ -8,10 +8,12 @@
     "node": ">=5.11.1"
   },
   "author": "Ivan Kozyrin <ipkozyrin@gmail.com>",
-  "main": "src/formkitConnect.js",
+  "main": "dist/react-formkit.umd.js",
   "scripts": {
     "test": "jest --config=jest-web.json",
-    "snapshot": "jest --config=jest-web.json -u $1"
+    "snapshot": "jest --config=jest-web.json -u $1",
+    "build": "yarn test && yarn run build-module",
+    "build-module": "webpack-cli --mode development --progress --config ./webpack.umd.config.js"
   },
   "dependencies": {
     "babel-core": "^6.26.0",
