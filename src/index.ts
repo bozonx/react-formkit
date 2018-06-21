@@ -1,3 +1,3 @@
-export { default as FormInterface } from './FormInterface';
-export { default as FieldInterface } from './FieldInterface';
+export { default as FormState } from './FormState';
+export { default as FieldState } from './FieldState';
 export { default as FormkitConnect } from './FormkitConnect';

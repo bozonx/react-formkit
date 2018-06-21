@@ -9,7 +9,7 @@ import {
   makeFormState,
   makeFieldState,
 } from './helpers';
-import FormInterface from './FormInterface';
+import FormState from './FormState';
 
 
 interface Props {
@@ -17,7 +17,7 @@ interface Props {
 }
 
 interface State {
-  formState: object;
+  formState: FormState;
   fields: object;
   wasStateInited: boolean;
 }
@@ -32,7 +32,7 @@ export default function formkitConnect(config) {
       static contextTypes = Target.contextTypes;
 
       state = {
-        formState: {},
+        formState: {} as FormState,
         fields: {},
         wasStateInited: false,
       };
@@ -174,6 +174,7 @@ export default function formkitConnect(config) {
         if (this.state.wasStateInited) {
 
           return React.createElement(Target, {
+            // TODO: use create ref
             ref: 'instance',
             ...this.props,
             form: this.form,
