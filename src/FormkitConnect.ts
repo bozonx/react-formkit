@@ -72,7 +72,7 @@ export default function formkitConnect(config) {
         this.setState({ formState: makeFormState(this.form) });
       };
 
-      getWrappedInstance() {
+      getWrappedInstance(): React.ReactNode {
         return this.refs.instance;
       }
 
@@ -119,19 +119,19 @@ export default function formkitConnect(config) {
         this.form.setSavedValues(initialValues);
       }
 
-      // TODO: из за этого получается рассогласование полей если одно поле меняет другое
-      private updateField(eventData) {
-        if (eventData.target !== 'field') return;
-
-        const fields = _.clone(this.state.fields);
-        const currentState = _.get(fields, eventData.field);
-        const field = _.get(this.form.fields, eventData.field);
-        const updatedField = _.defaultsDeep(makeFieldState(field), currentState);
-
-        _.set(fields, eventData.field, updatedField);
-
-        this.setState({ fields });
-      }
+      // // TODO: из за этого получается рассогласование полей если одно поле меняет другое
+      // private updateField(eventData) {
+      //   if (eventData.target !== 'field') return;
+      //
+      //   const fields = _.clone(this.state.fields);
+      //   const currentState = _.get(fields, eventData.field);
+      //   const field = _.get(this.form.fields, eventData.field);
+      //   const updatedField = _.defaultsDeep(makeFieldState(field), currentState);
+      //
+      //   _.set(fields, eventData.field, updatedField);
+      //
+      //   this.setState({ fields });
+      // }
 
       private updateFields() {
         const fields = _.clone(this.state.fields);
