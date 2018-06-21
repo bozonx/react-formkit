@@ -1,12 +1,23 @@
-const React = require('react');
-const _ = require('lodash');
-const helpers = require('./helpers');
-const formkit = require('formkit');
+import * as React from 'react';
+import * as _ from 'lodash';
+import formkit from 'formkit';
 
+import helpers from './helpers';
+
+
+interface Props {
+  initialValues?: object,
+}
+
+interface State {
+  formState: object;
+  fields: object;
+  wasStateInited: boolean;
+}
 
 export default function formkitConnect(config) {
   return function decorator(Target) {
-    return class extends React.Component {
+    return class Wrapper extends React.PureComponent<Props, State> {
       static contextTypes = Target.contextTypes;
 
       state = {
