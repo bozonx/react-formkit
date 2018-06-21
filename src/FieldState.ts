@@ -14,6 +14,7 @@ export default interface FieldInterface {
   savable: boolean,
   focused: boolean,
   defaultValue: any,
+  handleChange: (value: any) => void,
   props: {
     name: string,
     value: any,

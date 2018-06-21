@@ -1,12 +1,13 @@
-const _ = require('lodash');
+import * as _ from 'lodash';
 
+import FieldState from './FieldState';
 
 
 export function fillFieldsState(formFields) {
   const fields = {};
 
   _eachField(formFields, (field, path) => {
-    _.set(fields, path, this.generateInitialStateOfField(field));
+    _.set(fields, path, generateInitialStateOfField(field));
   });
 
   return fields;
@@ -17,7 +18,7 @@ export function generateFieldsInitParams(fields, initialValues) {
 
   if (_.isArray(fields)) {
     // convert array to schema notation
-    _.each(fields, (fieldName) => {
+    _.each(fields, (fieldName: string) => {
       const initialValue = _.get(initialValues, fieldName);
       // set field initial value to saved layer because it means value which was loaded from server.
       schema[fieldName] = { savedValue: initialValue };
@@ -52,7 +53,7 @@ export function generateInitialStateOfField(field) {
     }
   };
 
-  const fieldState = this.makeFieldState(field);
+  const fieldState: FieldState = makeFieldState(field);
   fieldState.handleChange = field.handleChange;
   fieldState.props.onChange = onChange;
 
@@ -75,7 +76,7 @@ export function makeFormState(form) {
   };
 }
 
-export function makeFieldState(field) {
+export function makeFieldState(field): FieldState {
   return {
     value: field.value,
     savedValue: field.savedValue,
@@ -92,10 +93,12 @@ export function makeFieldState(field) {
     savable: field.savable,
     focused: field.focused,
     defaultValue: field.defaultValue,
+    handleChange: (value: any) => {},
     props: {
       name: field.fullName,
       value: field.value,
       disabled: field.disabled,
+      onChange: (event: Event) => {},
     }
   }
 }

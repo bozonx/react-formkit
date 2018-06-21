@@ -10,12 +10,12 @@
     "removeComments": true,
     "noImplicitReturns": true,
     "noImplicitAny": false,
-    "noImplicitThis": false,
+    "noImplicitThis": true,
     "noUnusedLocals": false,
     "strict": true,
     "lib": ["es6", "es7", "dom"],
     "baseUrl": "src",
-    "outFile": "./dist/react-formkit.umd222.js"
+    "outFile": "./dist/react-formkit.umd.js"
   },
   "files": [
     "./src/index.ts"

@@ -23,9 +23,9 @@ interface State {
 }
 
 
-export default function formkitConnect(config) {
-  return function decorator(Target) {
-    return class Wrapper extends React.PureComponent<Props, State> {
+export default function FormkitConnect(config): React.ReactNode {
+  return function decorator(Target): React.ReactNode {
+    class Wrapper extends React.PureComponent<Props, State> {
       // TODO: use form class from formkit
       private form: any;
 
@@ -136,7 +136,7 @@ export default function formkitConnect(config) {
       private updateFields() {
         const fields = _.clone(this.state.fields);
 
-        const recursively = (container, path) => {
+        const recursively = (container, path: string) => {
           if (_.isPlainObject(container)) {
             // go deeper
             _.each(container, (field, name) => {
@@ -198,6 +198,8 @@ export default function formkitConnect(config) {
         }
       }
     }
+
+    return Wrapper;
   }
 
 };
