@@ -2,22 +2,22 @@
   "compilerOptions": {
     "sourceMap": true,
     "target": "es5",
-    "jsx": "react",
-    "module": "es6",
+    "module": "amd",
     "moduleResolution": "node",
     "experimentalDecorators": true,
-    "declaration": false,
+    "declaration": true,
+    "declarationMap": true,
     "removeComments": true,
     "noImplicitReturns": true,
     "noImplicitAny": false,
+    "noImplicitThis": false,
     "noUnusedLocals": false,
     "strict": true,
-    "outDir": "build",
     "lib": ["es6", "es7", "dom"],
     "baseUrl": "src",
-    "paths": {
-      "src/*": ["./src/*"]
-    }
+    "outFile": "./dist/react-formkit.umd222.js"
   },
-  "exclude": ["dist", "build", "node_modules"]
+  "files": [
+    "./src/index.ts"
+  ]
 }
