@@ -2,7 +2,13 @@ import * as React from 'react';
 import * as _ from 'lodash';
 import formkit from 'formkit';
 
-import helpers from './helpers';
+import {
+  fillFieldsState,
+  generateFieldsInitParams,
+  generateInitialStateOfField,
+  makeFormState,
+  makeFieldState,
+} from './helpers';
 import FormInterface from './FormInterface';
 
 
@@ -63,7 +69,7 @@ export default function formkitConnect(config) {
 
         //this.updateField(data);
         this.updateFields();
-        this.setState({ formState: helpers.makeFormState(this.form) });
+        this.setState({ formState: makeFormState(this.form) });
       };
 
       getWrappedInstance() {
@@ -82,7 +88,7 @@ export default function formkitConnect(config) {
       private initForm() {
         // validate wrapper needs to passing props to validate callback
         const validateWrapper = (errors, values) => config.validate(errors, values, this.props);
-        const fieldsInitial = helpers.generateFieldsInitParams(config.fields, this.props.initialValues);
+        const fieldsInitial = generateFieldsInitParams(config.fields, this.props.initialValues);
 
         this.form.init(fieldsInitial, config.validate && validateWrapper);
 
@@ -91,8 +97,8 @@ export default function formkitConnect(config) {
       }
 
       private initState() {
-        const formState = helpers.makeFormState(this.form);
-        const fields = helpers.fillFieldsState(this.form.fields);
+        const formState = makeFormState(this.form);
+        const fields = fillFieldsState(this.form.fields);
 
         this.setState({ formState, fields }, () => {
           // it needs for componentWillMount of underlying component receives form and field state in props
@@ -120,7 +126,7 @@ export default function formkitConnect(config) {
         const fields = _.clone(this.state.fields);
         const currentState = _.get(fields, eventData.field);
         const field = _.get(this.form.fields, eventData.field);
-        const updatedField = _.defaultsDeep(helpers.makeFieldState(field), currentState);
+        const updatedField = _.defaultsDeep(makeFieldState(field), currentState);
 
         _.set(fields, eventData.field, updatedField);
 
@@ -144,10 +150,10 @@ export default function formkitConnect(config) {
           const currentState = _.get(fields, path);
 
           if (_.isUndefined(currentState)) {
-            _.set(fields, path, helpers.generateInitialStateOfField(container));
+            _.set(fields, path, generateInitialStateOfField(container));
           }
           else {
-            _.set(fields, path, _.defaultsDeep(helpers.makeFieldState(container), currentState));
+            _.set(fields, path, _.defaultsDeep(makeFieldState(container), currentState));
           }
 
         };
