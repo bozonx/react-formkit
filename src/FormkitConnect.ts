@@ -1,6 +1,6 @@
 import * as React from 'react';
 import * as _ from 'lodash';
-import formkit from 'formkit';
+import formkit, { Form, Field } from 'formkit';
 
 import {
   fillFieldsState,
@@ -11,40 +11,43 @@ import {
 } from './helpers';
 import FormState from './interfaces/FormState';
 import Config from './interfaces/Config';
+import {ClassType} from 'react';
 
+
+type Values = {[index: string]: any};
 
 interface Props {
-  initialValues?: object,
+  initialValues?: Values,
 }
 
 interface State {
   formState: FormState;
-  fields: object;
+  fieldsState: {[index: string]: Field};
   wasStateInited: boolean;
 }
 
 
 export default function FormkitConnect(config: Config): React.ReactNode {
-  return function decorator(Target): React.ReactNode {
+  return function decorator(Target: React.ClassType): React.ReactNode {
     class Wrapper extends React.PureComponent<Props, State> {
-      // TODO: use form class from formkit
-      private form: any;
+      private form: Form;
 
+      // TODO: doesn't need
       static contextTypes = Target.contextTypes;
 
       state = {
         formState: {} as FormState,
-        fields: {},
+        fieldsState: {},
         wasStateInited: false,
       };
 
-      componentWillReceiveProps(nextProps: Props) {
+      componentWillReceiveProps(nextProps: Props): void {
         if (_.isEqual(nextProps.initialValues, this.props.initialValues)) return;
 
         this.updateSavedValues(nextProps);
       }
 
-      componentWillMount() {
+      componentWillMount(): void {
         if (!config)
           throw new Error(`You have to specify at least fields definition for formkit connector's config!`);
         if (!config.fields)
@@ -60,11 +63,11 @@ export default function FormkitConnect(config: Config): React.ReactNode {
         this.form.on('storage', this.handleStorageChange);
       }
 
-      componentWillUnmount() {
+      componentWillUnmount(): void {
         this.form.destroy();
       }
 
-      handleStorageChange = (data) => {
+      handleStorageChange = (data): void => {
 
         // TODO: review
 
@@ -97,21 +100,21 @@ export default function FormkitConnect(config: Config): React.ReactNode {
         this.initState();
       }
 
-      private initState() {
+      private initState(): void {
         const formState = makeFormState(this.form);
-        const fields = fillFieldsState(this.form.fields);
+        const fieldsState = fillFieldsState(this.form.fields);
 
-        this.setState({ formState, fields }, () => {
+        this.setState({ formState, fieldsState }, () => {
           // it needs for componentWillMount of underlying component receives form and field state in props
           this.setState({ wasStateInited: true });
         });
       }
 
-      private updateSavedValues(props) {
+      private updateSavedValues(props: Props): void {
 
         // TODO: review
 
-        let initialValues = props.initialValues;
+        let initialValues: Values = props.initialValues;
         if (config.mapInitialValues) {
           initialValues = config.mapInitialValues(initialValues, props);
         }
@@ -135,7 +138,10 @@ export default function FormkitConnect(config: Config): React.ReactNode {
       // }
 
       private updateFields() {
-        const fields = _.clone(this.state.fields);
+
+        // TODO: remake
+
+        const fieldsState = _.clone(this.state.fieldsState);
 
         const recursively = (container, path: string) => {
           if (_.isPlainObject(container)) {
@@ -148,50 +154,43 @@ export default function FormkitConnect(config: Config): React.ReactNode {
             return;
           }
 
-          const currentState = _.get(fields, path);
+          const currentState = _.get(fieldsState, path);
 
           if (_.isUndefined(currentState)) {
-            _.set(fields, path, generateInitialStateOfField(container));
+            _.set(fieldsState, path, generateInitialStateOfField(container));
           }
           else {
-            _.set(fields, path, _.defaultsDeep(makeFieldState(container), currentState));
+            _.set(fieldsState, path, _.defaultsDeep(makeFieldState(container), currentState));
           }
 
         };
 
         recursively(this.form.fields, '');
 
-        this.setState({ fields });
+        this.setState({ fieldsState });
       }
 
-      private handleSubmit = (event) => {
+      /**
+       * Place this to onSubmit prop of <form>
+       */
+      private handleSubmit = (event: Event): void => {
         event.preventDefault();
         event.stopPropagation();
         this.form.handleSubmit();
       };
 
 
-      render() {
+      render(): React.ReactNode {
         if (this.state.wasStateInited) {
 
           return React.createElement(Target, {
             // TODO: use create ref
             ref: 'instance',
-            ...this.props,
             form: this.form,
-            fields: this.state.fields,
-            values: this.state.formState.values,
-            savedValues: this.state.formState.savedValues,
-            editedValues: this.state.formState.editedValues,
-            unsavedValues: this.state.formState.unsavedValues,
-            dirty: this.state.formState.dirty,
-            touched: this.state.formState.touched,
-            saving: this.state.formState.saving,
-            submitting: this.state.formState.submitting,
-            submittable: this.state.formState.submittable,
-            valid: this.state.formState.valid,
-            errors: this.state.formState.errors,
+            fields: this.state.fieldsState,
             handleSubmit: this.handleSubmit,
+            ...this.state.formState,
+            ...this.props,
           });
         }
         else {
