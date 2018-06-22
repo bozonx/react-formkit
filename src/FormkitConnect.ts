@@ -9,7 +9,8 @@ import {
   makeFormState,
   makeFieldState,
 } from './helpers';
-import FormState from './FormState';
+import FormState from './interfaces/FormState';
+import Config from './interfaces/Config';
 
 
 interface Props {
@@ -23,7 +24,7 @@ interface State {
 }
 
 
-export default function FormkitConnect(config): React.ReactNode {
+export default function FormkitConnect(config: Config): React.ReactNode {
   return function decorator(Target): React.ReactNode {
     class Wrapper extends React.PureComponent<Props, State> {
       // TODO: use form class from formkit

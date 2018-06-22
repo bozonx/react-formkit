@@ -1,6 +1,6 @@
 import * as _ from 'lodash';
 
-import FieldState from './FieldState';
+import FieldState from './interfaces/FieldState';
 
 
 export function fillFieldsState(formFields) {
