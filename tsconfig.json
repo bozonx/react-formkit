@@ -2,8 +2,7 @@
   "compilerOptions": {
     "sourceMap": true,
     "target": "es5",
-    "module": "amd",
-    "moduleResolution": "node",
+    "module": "umd",
     "experimentalDecorators": true,
     "declaration": true,
     "declarationMap": true,
@@ -15,7 +14,7 @@
     "strict": true,
     "lib": ["es6", "es7", "dom"],
     "baseUrl": "src",
-    "outFile": "./dist/react-formkit.umd.js"
+    "outDir": "./dist"
   },
   "files": [
     "./src/index.ts"

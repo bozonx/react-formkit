@@ -8,7 +8,8 @@
     "node": ">=5.11.1"
   },
   "author": "Ivan Kozyrin <ipkozyrin@gmail.com>",
-  "main": "dist/react-formkit.umd.js",
+  "main": "dist/react-formkit.js",
+  "types": "dist/react-formkit.d.ts",
   "scripts": {
     "test": "jest --config=jest-web.json",
     "snapshot": "jest --config=jest-web.json -u $1",
@@ -24,6 +25,7 @@
     "@types/lodash": "^4.14.110",
     "@types/react": "^16.4.1",
     "babel-jest": "^22.4.3",
+    "csstype": "^2.5.5",
     "enzyme": "^3.3.0",
     "enzyme-to-json": "^3.3.3",
     "identity-obj-proxy": "^3.0.0",
@@ -37,6 +39,7 @@
     "webpack-merge": "^4.1.2"
   },
   "peerDependencies": {
-    "react": "^16.4.1"
+    "react": "^16.4.1",
+    "react-dom": "^16.4.1"
   }
 }
