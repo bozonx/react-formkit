@@ -13,7 +13,7 @@
     "test": "jest --config=jest-web.json",
     "snapshot": "jest --config=jest-web.json -u $1",
     "build": "yarn test && yarn run build-module",
-    "bb": "tsc",
+    "tsc": "tsc",
     "build-module": "webpack-cli --mode development --progress --config ./webpack.umd.config.js"
   },
   "dependencies": {

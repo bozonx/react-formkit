@@ -28,7 +28,10 @@ interface State {
 
 
 export default function FormkitConnect(config: Config): React.ReactNode {
-  return function decorator(Target: React.ClassType): React.ReactNode {
+
+  // TODO: задать тип для Target
+
+  return function decorator(Target): React.ReactNode {
     class Wrapper extends React.PureComponent<Props, State> {
       private form: Form;
 
@@ -42,6 +45,9 @@ export default function FormkitConnect(config: Config): React.ReactNode {
       };
 
       componentWillReceiveProps(nextProps: Props): void {
+
+        // TODO: review
+
         if (_.isEqual(nextProps.initialValues, this.props.initialValues)) return;
 
         this.updateSavedValues(nextProps);
@@ -91,7 +97,9 @@ export default function FormkitConnect(config: Config): React.ReactNode {
 
       private initForm() {
         // validate wrapper needs to passing props to validate callback
-        const validateWrapper = (errors, values) => config.validate(errors, values, this.props);
+        const validateWrapper = (errors, values) => {
+          return config.validate && config.validate(errors, values, this.props);
+        };
         const fieldsInitial = generateFieldsInitParams(config.fields, this.props.initialValues);
 
         this.form.init(fieldsInitial, config.validate && validateWrapper);
@@ -111,10 +119,8 @@ export default function FormkitConnect(config: Config): React.ReactNode {
       }
 
       private updateSavedValues(props: Props): void {
+        let initialValues: Values = props.initialValues || {};
 
-        // TODO: review
-
-        let initialValues: Values = props.initialValues;
         if (config.mapInitialValues) {
           initialValues = config.mapInitialValues(initialValues, props);
         }

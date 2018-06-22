@@ -16,11 +16,11 @@ var __assign = (this && this.__assign) || Object.assign || function(t) {
     }
     return t;
 };
-define("FormState", ["require", "exports"], function (require, exports) {
+define("interfaces/FormState", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
 });
-define("FieldState", ["require", "exports"], function (require, exports) {
+define("interfaces/FieldState", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
 });
@@ -145,6 +145,10 @@ define("helpers", ["require", "exports", "lodash"], function (require, exports, 
         return !_.isEmpty(interSection);
     }
 });
+define("interfaces/Config", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+});
 define("FormkitConnect", ["require", "exports", "react", "lodash", "formkit", "helpers"], function (require, exports, React, _, formkit_1, helpers_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -156,7 +160,7 @@ define("FormkitConnect", ["require", "exports", "react", "lodash", "formkit", "h
                     var _this = _super !== null && _super.apply(this, arguments) || this;
                     _this.state = {
                         formState: {},
-                        fields: {},
+                        fieldsState: {},
                         wasStateInited: false,
                     };
                     _this.handleStorageChange = function (data) {
@@ -200,7 +204,9 @@ define("FormkitConnect", ["require", "exports", "react", "lodash", "formkit", "h
                 };
                 Wrapper.prototype.initForm = function () {
                     var _this = this;
-                    var validateWrapper = function (errors, values) { return config.validate(errors, values, _this.props); };
+                    var validateWrapper = function (errors, values) {
+                        return config.validate && config.validate(errors, values, _this.props);
+                    };
                     var fieldsInitial = helpers_1.generateFieldsInitParams(config.fields, this.props.initialValues);
                     this.form.init(fieldsInitial, config.validate && validateWrapper);
                     this.initState();
@@ -208,8 +214,8 @@ define("FormkitConnect", ["require", "exports", "react", "lodash", "formkit", "h
                 Wrapper.prototype.initState = function () {
                     var _this = this;
                     var formState = helpers_1.makeFormState(this.form);
-                    var fields = helpers_1.fillFieldsState(this.form.fields);
-                    this.setState({ formState: formState, fields: fields }, function () {
+                    var fieldsState = helpers_1.fillFieldsState(this.form.fields);
+                    this.setState({ formState: formState, fieldsState: fieldsState }, function () {
                         _this.setState({ wasStateInited: true });
                     });
                 };
@@ -221,7 +227,7 @@ define("FormkitConnect", ["require", "exports", "react", "lodash", "formkit", "h
                     this.form.setSavedValues(initialValues);
                 };
                 Wrapper.prototype.updateFields = function () {
-                    var fields = _.clone(this.state.fields);
+                    var fieldsState = _.clone(this.state.fieldsState);
                     var recursively = function (container, path) {
                         if (_.isPlainObject(container)) {
                             _.each(container, function (field, name) {
@@ -230,20 +236,20 @@ define("FormkitConnect", ["require", "exports", "react", "lodash", "formkit", "h
                             });
                             return;
                         }
-                        var currentState = _.get(fields, path);
+                        var currentState = _.get(fieldsState, path);
                         if (_.isUndefined(currentState)) {
-                            _.set(fields, path, helpers_1.generateInitialStateOfField(container));
+                            _.set(fieldsState, path, helpers_1.generateInitialStateOfField(container));
                         }
                         else {
-                            _.set(fields, path, _.defaultsDeep(helpers_1.makeFieldState(container), currentState));
+                            _.set(fieldsState, path, _.defaultsDeep(helpers_1.makeFieldState(container), currentState));
                         }
                     };
                     recursively(this.form.fields, '');
-                    this.setState({ fields: fields });
+                    this.setState({ fieldsState: fieldsState });
                 };
                 Wrapper.prototype.render = function () {
                     if (this.state.wasStateInited) {
-                        return React.createElement(Target, __assign({ ref: 'instance' }, this.props, { form: this.form, fields: this.state.fields, values: this.state.formState.values, savedValues: this.state.formState.savedValues, editedValues: this.state.formState.editedValues, unsavedValues: this.state.formState.unsavedValues, dirty: this.state.formState.dirty, touched: this.state.formState.touched, saving: this.state.formState.saving, submitting: this.state.formState.submitting, submittable: this.state.formState.submittable, valid: this.state.formState.valid, errors: this.state.formState.errors, handleSubmit: this.handleSubmit }));
+                        return React.createElement(Target, __assign({ ref: 'instance', form: this.form, fields: this.state.fieldsState, handleSubmit: this.handleSubmit }, this.state.formState, this.props));
                     }
                     else {
                         return React.createElement('span');
