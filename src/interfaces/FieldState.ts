@@ -1,3 +1,5 @@
+import * as React from 'react';
+
 export default interface FieldInterface {
   value: any,
   savedValue: any,
@@ -19,6 +21,6 @@ export default interface FieldInterface {
     name: string,
     value: any,
     disabled: boolean,
-    onChange: (event: Event) => void,
+    onChange: (event: React.ChangeEvent<HTMLInputElement>) => void,
   }
 }

@@ -29,12 +29,10 @@ interface State {
 
 //export default function FormkitConnect<T extends {new(...args:any[]):{}}>(constructor: T) {
 export default function FormkitConnect(config): React.ReactNode {
-  console.log(111111)
   // TODO: задать тип для Target
 
   return function decorator(Target) {
     const config = Target.formConfig;
-    console.log(2222222)
 
     class Wrapper extends React.PureComponent<Props, State> {
       private form: Form;
