@@ -1,8 +1,8 @@
 {
   "compilerOptions": {
     "sourceMap": true,
-    "target": "es5",
-    "module": "umd",
+    "target": "es2017",
+    "module": "es6",
     "experimentalDecorators": true,
     "declaration": true,
     "declarationMap": true,
@@ -16,7 +16,7 @@
     "baseUrl": "src",
     "outDir": "./dist"
   },
-  "files": [
-    "./src/index.ts"
+  "include": [
+    "src"
   ]
 }

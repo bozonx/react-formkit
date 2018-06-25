@@ -27,7 +27,8 @@ interface State {
 }
 
 
-export default function FormkitConnect<T extends {new(...args:any[]):{}}>(constructor: T) {
+//export default function FormkitConnect<T extends {new(...args:any[]):{}}>(constructor: T) {
+export default function FormkitConnect(config): React.ReactNode {
   console.log(111111)
   // TODO: задать тип для Target
 
