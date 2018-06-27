@@ -147,6 +147,7 @@ export default function FormkitConnect(config): React.ReactNode {
 
       private updateFields() {
 
+        // TODO: нужно знать какое поле изменилось и изменить только его
         // TODO: remake
 
         const fieldsState = _.clone(this.state.fieldsState);
@@ -165,9 +166,12 @@ export default function FormkitConnect(config): React.ReactNode {
           const currentState = _.get(fieldsState, path);
 
           if (_.isUndefined(currentState)) {
+            // make a new field
             _.set(fieldsState, path, generateInitialStateOfField(container));
           }
           else {
+            // update existed
+            // TODO: remake - решить что делать с onChange - он не должен постоянно создаваться новый
             _.set(fieldsState, path, _.defaultsDeep(makeFieldState(container), currentState));
           }
 

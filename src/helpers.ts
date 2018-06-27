@@ -1,6 +1,7 @@
 import * as _ from 'lodash';
 
 import FieldState from './interfaces/FieldState';
+import * as React from 'react';
 
 
 export function fillFieldsState(formFields) {
@@ -41,7 +42,7 @@ export function generateFieldsInitParams(fields, initialValues) {
   return schema;
 }
 
-export function generateInitialStateOfField(field) {
+export function generateInitialStateOfField(field): FieldState {
   const onChange = (param) => {
     if (_.isObject(param) && param.target) {
       // params means event
@@ -53,11 +54,7 @@ export function generateInitialStateOfField(field) {
     }
   };
 
-  const fieldState: FieldState = makeFieldState(field);
-  fieldState.handleChange = field.handleChange;
-  fieldState.props.onChange = onChange;
-
-  return fieldState;
+  return makeFieldState(field, onChange);
 }
 
 export function makeFormState(form) {
@@ -76,7 +73,7 @@ export function makeFormState(form) {
   };
 }
 
-export function makeFieldState(field): FieldState {
+export function makeFieldState(field, onChange?): FieldState {
   return {
     value: field.value,
     savedValue: field.savedValue,
@@ -93,12 +90,12 @@ export function makeFieldState(field): FieldState {
     savable: field.savable,
     focused: field.focused,
     defaultValue: field.defaultValue,
-    handleChange: (value: any) => {},
+    handleChange: field.handleChange,
     props: {
       name: field.fullName,
       value: field.value,
       disabled: field.disabled,
-      onChange: (event: Event) => {},
+      onChange: onChange,
     }
   }
 }
