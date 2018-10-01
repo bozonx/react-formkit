@@ -1,6 +1,7 @@
 import * as React from 'react';
 import * as _ from 'lodash';
-import formkit, { Form, Field } from 'formkit';
+//import formkit, { Form, Field } from 'formkit';
+import { newForm, Form, Field } from 'formkit/src/index';
 
 import {
   fillFieldsState,
@@ -28,15 +29,19 @@ interface State {
 
 
 //export default function FormkitConnect<T extends {new(...args:any[]):{}}>(constructor: T) {
-export default function FormkitConnect(config: Config): (Target: any) => void {
+export default function FormkitConnect(config: Config): (Target: any) => any {
   // TODO: задать тип для Target
   //React.ReactNode
 
-  return function decorator(Target): React.ReactNode {
+  return function decorator(Target): new(...args:any[]) => void {
     const config = Target.formConfig;
 
     class Wrapper extends React.PureComponent<Props, State> {
-      private form: Form;
+      private _form?: Form;
+
+      get form(): Form {
+        return this._form as Form;
+      }
 
       // TODO: doesn't need
       static contextTypes = Target.contextTypes;
@@ -65,7 +70,7 @@ export default function FormkitConnect(config: Config): (Target: any) => void {
           throw new Error(`validate callback has to be a function!`);
 
         // get instance of form
-        this.form = this.instantiateForm(config);
+        this._form = this.instantiateForm(config);
         // init form with specified fields and initial values
         this.initForm();
         // update react state on each change
@@ -95,7 +100,7 @@ export default function FormkitConnect(config: Config): (Target: any) => void {
           return config.getForm(this.props, this.context);
         }
 
-        return formkit.newForm(connectorConfig.config);
+        return newForm(connectorConfig.config);
       }
 
       private initForm() {
@@ -186,10 +191,13 @@ export default function FormkitConnect(config: Config): (Target: any) => void {
       /**
        * Place this to onSubmit prop of <form>
        */
-      private handleSubmit = (event: Event): void => {
-        event.preventDefault();
-        event.stopPropagation();
-        this.form.handleSubmit();
+      private handleSubmit = (event?: Event): Promise<void> => {
+        if (event) {
+          event.preventDefault();
+          event.stopPropagation();
+        }
+
+        return this.form.handleSubmit();
       };
 
 

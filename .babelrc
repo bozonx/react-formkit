@@ -1,20 +1,7 @@
 {
-  "plugins": [
-    "transform-runtime"
-  ],
   "presets": [
-    ["env", {
-      "targets": {
-        "node": "current"
-      }
-    }],
+
     "react",
     "stage-2"
-  ],
-  "env": {
-    "cacheDirectory": true,
-    "test": {
-      "plugins": ["transform-es2015-modules-commonjs"]
-    }
-  }
+  ]
 }
