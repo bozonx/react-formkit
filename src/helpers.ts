@@ -85,7 +85,8 @@ export function makeFieldState(field, onChange?): FieldState {
     touched: field.touched,
     valid: field.valid,
     // rename invalidMsg to error for more convenience
-    error: field.invalidMsg,
+    // TODO: null не правильно использовать. Но если его не использовать то не будут перерисовываться ошибки
+    error: field.invalidMsg || null,
     saving: field.saving,
     savable: field.savable,
     focused: field.focused,

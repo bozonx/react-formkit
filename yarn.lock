@@ -2022,7 +2022,7 @@ event-stream@~3.3.0:
     stream-combiner "~0.0.4"
     through "~2.3.1"
 
-eventemitter3@^3.0.1, eventemitter3@^3.1.0:
+eventemitter3@^3.1.0:
   version "3.1.0"
   resolved "https://registry.npmjs.org/eventemitter3/-/eventemitter3-3.1.0.tgz#090b4d6cdbd645ed10bf750d4b5407942d7ba163"
 
@@ -2252,14 +2252,6 @@ form-data@~2.3.2:
     asynckit "^0.4.0"
     combined-stream "1.0.6"
     mime-types "^2.1.12"
-
-formkit@^1.0.4:
-  version "1.0.4"
-  resolved "https://registry.npmjs.org/formkit/-/formkit-1.0.4.tgz#fc5f9e17e27f0aaded64ed33057f1abaf7049e58"
-  dependencies:
-    eventemitter3 "^3.0.1"
-    immutable "^3.8.2"
-    lodash "^4.17.5"
 
 fragment-cache@^0.2.1:
   version "0.2.1"

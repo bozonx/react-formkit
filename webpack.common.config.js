@@ -3,7 +3,7 @@ const webpack = require('webpack');
 
 
 module.exports = {
-  entry: './src/formkitConnect.js',
+  entry: './src/formkitConnect',
   output: {
     path: path.resolve(__dirname, 'dist'),
     library: 'ReactFormkit',
