@@ -2,8 +2,9 @@
   "compilerOptions": {
     "sourceMap": true,
     "target": "es2017",
-    "module": "es6",
-    "experimentalDecorators": true,
+    //"module": "es6",
+    "module": "commonjs",
+    //"experimentalDecorators": true,
     "declaration": true,
     "declarationMap": true,
     "removeComments": true,
@@ -16,7 +17,6 @@
     "baseUrl": "src",
     "outDir": "./dist"
   },
-  "include": [
-    "src"
-  ]
+  //"exclude": ["dist"]
+  "include": ["src"]
 }

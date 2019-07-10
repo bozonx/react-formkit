@@ -1,7 +1,6 @@
 import * as React from 'react';
 import * as _ from 'lodash';
-//import formkit, { Form, Field } from 'formkit';
-import { newForm, Form, Field } from 'formkit/src/index';
+import { newForm, Form, Field } from 'formkit';
 
 import {
   fillFieldsState,

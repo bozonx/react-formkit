@@ -43,8 +43,9 @@ export function generateFieldsInitParams(fields, initialValues) {
 }
 
 export function generateInitialStateOfField(field): FieldState {
-  const onChange = (param) => {
-    if (_.isObject(param) && param.target) {
+  const onChange = (param: any) => {
+
+    if (typeof param === 'object' && param.target) {
       // params means event
       field.handleChange(param.target.value);
     }

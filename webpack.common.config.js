@@ -3,7 +3,7 @@ const webpack = require('webpack');
 
 
 module.exports = {
-  entry: './src/formkitConnect',
+  entry: './src/index.ts',
   output: {
     path: path.resolve(__dirname, 'dist'),
     library: 'ReactFormkit',
@@ -13,9 +13,9 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.jsx?$/,
-        use: 'babel-loader',
-        exclude: /node_modules/,
+        test: /\.tsx?$/,
+        use: 'ts-loader',
+        //exclude: /node_modules/,
       },
     ],
   },
@@ -25,6 +25,7 @@ module.exports = {
   //   //'prop-types': 'PropTypes',
   // },
   externals: {
+    // TODO: add lodash and immutable, eventemitter3
     'react': {
       root: 'React',
       commonjs2: 'react',
@@ -37,6 +38,9 @@ module.exports = {
       commonjs: 'react-dom',
       amd: 'react-dom'
     }
+  },
+  resolve: {
+    extensions: ['.js', '.json', '.ts', '.tsx'],
   },
   // plugins: [
   //   // new webpack.ProvidePlugin({
