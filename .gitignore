@@ -23,3 +23,5 @@ node_modules
 libs
 
 dist
+
+.rpt2_cache

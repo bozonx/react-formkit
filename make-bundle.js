@@ -11,7 +11,7 @@ const compiledPath = path.join(__dirname, "compiled")
 const distNpmPath = path.join(__dirname, "..")
 async function build() {
   let bundle = await rollup.rollup({
-    input: path.join(compiledPath, "index.js")
+    input: path.join(compiledPath, "react-formkit.ts.js")
   })
   let { code } = await bundle.generate({
     format: "cjs",
@@ -31,7 +31,7 @@ async function makeDefinitionsCode() {
     removeLocalImportsExports((await readFile(path.join(srcPath, "driver-definitions.d.ts"), "utf-8")).trim()),
     "// -- Entry point definition --",
     removeSemicolons(
-      removeLocalImportsExports((await readFile(path.join(compiledPath, "index.d.ts"), "utf-8")).trim()),
+      removeLocalImportsExports((await readFile(path.join(compiledPath, "react-formkit.ts.d.ts"), "utf-8")).trim()),
     )
   ]
   return defs.join("\n\n")

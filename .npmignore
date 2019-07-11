@@ -1,7 +1,9 @@
 .idea
+.rpt2_cache
 doc
 examples
 test
+src
 
 # root files
 .editorconfig
@@ -9,9 +11,9 @@ test
 .istanbul.yml
 .travis.yml
 .nvmrc
-esdoc.json
+rollup.config.js
+
 webpack.bundle.config.js
 webpack.common.config.js
 webpack.web.config.js
 webpack.web-min.config.js
-yarn.lock

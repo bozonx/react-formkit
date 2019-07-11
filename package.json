@@ -1,15 +1,30 @@
 {
   "name": "react-formkit",
-  "version": "1.1.0",
-  "description": "React connector to formkit.",
+  "version": "1.1.1",
+  "description": "React connector for formkit",
   "license": "MIT",
-  "repository": "git@github.com:bozonx/react-formkit.git",
+
   "engines": {
-    "node": ">=5.11.1"
+    "node": ">=9.x"
   },
-  "author": "Ivan Kozyrin <ipkozyrin@gmail.com>",
+  "author": {
+    "name": "Ivan Kozyrin",
+    "url": "https://github.com/bozonx",
+    "email": "ipkozyrin@gmail.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:bozonx/react-formkit.git"
+  },
+  "bugs": {
+    "url": "https://github.com/bozonx/react-formkit/issues"
+  },
   "main": "dist/react-formkit.js",
-  "types": "dist/react-formkit.d.ts",
+  "module": "dist/react-formkit-es5.js",
+  "typings": "dist/types/react-formkit.d.ts",
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "test": "jest --config=jest-web.json",
     "snapshot": "jest --config=jest-web.json -u $1",
@@ -19,6 +34,7 @@
     "_clear": "rimraf dist/*",
     "_tsc": "tsc",
     "_make-bundle": "node ./make-bundle",
+    "_build-module": "rollup -c rollup.config.js",
     "buildts": "run-s _clear _tsc _make-bundle",
     "build-module": "webpack-cli --mode development --progress --config ./webpack.umd.config.js"
   },
@@ -41,7 +57,12 @@
     "npm-run-all": "^4.1.5",
     "react-addons-test-utils": "^15.6.2",
     "rimraf": "^2.6.3",
-    "rollup": "^1.16.6",
+    "rollup": "^1.16.7",
+    "rollup-plugin-commonjs": "^10.0.1",
+    "rollup-plugin-json": "^4.0.0",
+    "rollup-plugin-node-resolve": "^5.2.0",
+    "rollup-plugin-sourcemaps": "^0.4.2",
+    "rollup-plugin-typescript2": "^0.21.2",
     "ts-loader": "^6.0.4",
     "typescript": "^3.5.3",
     "typescript-bundle": "^1.0.16",
