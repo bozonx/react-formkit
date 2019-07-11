@@ -1,6 +1,6 @@
 {
   "name": "react-formkit",
-  "version": "1.1.1",
+  "version": "1.1.5",
   "description": "React connector for formkit",
   "license": "MIT",
   "engines": {
@@ -38,6 +38,7 @@
     "build-module": "webpack-cli --mode development --progress --config ./webpack.umd.config.js"
   },
   "dependencies": {
+    "formkit": "^1.1.5",
     "immutable": "^4.0.0-rc.12",
     "lodash": "^4.17.14"
   },
