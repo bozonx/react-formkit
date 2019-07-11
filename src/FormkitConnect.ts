@@ -65,7 +65,7 @@ export default function FormkitConnect(config: Config): (Target: any) => any {
           throw new Error(`You have to specify at least fields definition for formkit connector's config!`);
         if (!config.fields)
           throw new Error(`You have to specify fields definition for formkit connector's config!`);
-        if (config.validate && !_.isFunction(config.validate))
+        if (config.validate && typeof config.validate !== 'function')
           throw new Error(`validate callback has to be a function!`);
 
         // get instance of form
@@ -170,7 +170,7 @@ export default function FormkitConnect(config: Config): (Target: any) => any {
 
           const currentState = _.get(fieldsState, path);
 
-          if (_.isUndefined(currentState)) {
+          if (typeof currentState === 'undefined') {
             // make a new field
             _.set(fieldsState, path, generateInitialStateOfField(container));
           }

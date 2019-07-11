@@ -17,7 +17,7 @@ export function fillFieldsState(formFields) {
 export function generateFieldsInitParams(fields, initialValues) {
   const schema = {};
 
-  if (_.isArray(fields)) {
+  if (Array.isArray(fields)) {
     // convert array to schema notation
     _.each(fields, (fieldName: string) => {
       const initialValue = _.get(initialValues, fieldName);
@@ -29,7 +29,7 @@ export function generateFieldsInitParams(fields, initialValues) {
     _eachField(fields, (field, path) => {
       const initialValue = _.get(initialValues, path);
       schema[path] = field;
-      if (!_.isUndefined(initialValue)) {
+      if (typeof initialValue !== 'undefined') {
         // set field initial value to saved layer because it means value which was loaded from server.
         schema[path].savedValue = initialValue;
       }
@@ -140,7 +140,7 @@ function _eachField(fields, cb) {
 }
 
 function _isField(container) {
-  if (_.isObject(container)) {
+  if (typeof container === 'object') {
     if (container.constructor.name === 'Field') return true;
   }
 
@@ -154,7 +154,7 @@ function _isField(container) {
     'savedValue',
   ];
 
-  const interSection = _.intersection(_.keys(container), lookingParams);
+  const interSection = _.intersection(Object.keys(container), lookingParams);
 
   return !_.isEmpty(interSection);
 }

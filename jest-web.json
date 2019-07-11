@@ -1,7 +1,7 @@
 {
   "roots": ["<rootDir>/src/", "<rootDir>/__tests__/"],
   "modulePaths": [ "./src" ],
-  "setupTestFrameworkScriptFile": "./node_modules/jest-enzyme/lib/index.js",
+  "setupFilesAfterEnv": ["./node_modules/jest-enzyme/lib/index.js"],
   "moduleDirectories": [ "node_modules" ],
   "moduleNameMapper": {
     "\\.(css|sass|scss)$": "identity-obj-proxy"
