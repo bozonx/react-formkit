@@ -1,6 +1,13 @@
 import * as React from 'react';
-import * as _ from 'lodash';
 import { newForm, Form, Field } from 'formkit';
+const isEqual = require('lodash/isEqual');
+const clone = require('lodash/clone');
+const get = require('lodash/get');
+const set = require('lodash/set');
+const each = require('lodash/each');
+const isPlainObject = require('lodash/isPlainObject');
+const trimStart = require('lodash/trimStart');
+const defaultsDeep = require('lodash/defaultsDeep');
 
 import {
   fillFieldsState,
@@ -55,7 +62,7 @@ export default function FormkitConnect(config: Config): (Target: any) => any {
 
         // TODO: review
 
-        if (_.isEqual(nextProps.initialValues, this.props.initialValues)) return;
+        if (isEqual(nextProps.initialValues, this.props.initialValues)) return;
 
         this.updateSavedValues(nextProps);
       }
@@ -155,29 +162,29 @@ export default function FormkitConnect(config: Config): (Target: any) => any {
         // TODO: нужно знать какое поле изменилось и изменить только его
         // TODO: remake
 
-        const fieldsState = _.clone(this.state.fieldsState);
+        const fieldsState = clone(this.state.fieldsState);
 
         const recursively = (container, path: string) => {
-          if (_.isPlainObject(container)) {
+          if (isPlainObject(container)) {
             // go deeper
-            _.each(container, (field, name) => {
-              const curPath = _.trimStart(`${path}.${name}`, '.');
+            each(container, (field, name) => {
+              const curPath = trimStart(`${path}.${name}`, '.');
               recursively(field, curPath);
             });
 
             return;
           }
 
-          const currentState = _.get(fieldsState, path);
+          const currentState = get(fieldsState, path);
 
           if (typeof currentState === 'undefined') {
             // make a new field
-            _.set(fieldsState, path, generateInitialStateOfField(container));
+            set(fieldsState, path, generateInitialStateOfField(container));
           }
           else {
             // update existed
             // TODO: remake - решить что делать с onChange - он не должен постоянно создаваться новый
-            _.set(fieldsState, path, _.defaultsDeep(makeFieldState(container), currentState));
+            set(fieldsState, path, defaultsDeep(makeFieldState(container), currentState));
           }
 
         };

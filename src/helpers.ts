@@ -1,14 +1,19 @@
-import * as _ from 'lodash';
+const get = require('lodash/get');
+const set = require('lodash/set');
+const each = require('lodash/each');
+const isPlainObject = require('lodash/isPlainObject');
+const trimStart = require('lodash/trimStart');
+const intersection = require('lodash/intersection');
+const isEmpty = require('lodash/isEmpty');
 
 import FieldState from './interfaces/FieldState';
-import * as React from 'react';
 
 
 export function fillFieldsState(formFields) {
   const fields = {};
 
   _eachField(formFields, (field, path) => {
-    _.set(fields, path, generateInitialStateOfField(field));
+    set(fields, path, generateInitialStateOfField(field));
   });
 
   return fields;
@@ -18,16 +23,17 @@ export function generateFieldsInitParams(fields, initialValues) {
   const schema = {};
 
   if (Array.isArray(fields)) {
+    // TODO: use for of
     // convert array to schema notation
-    _.each(fields, (fieldName: string) => {
-      const initialValue = _.get(initialValues, fieldName);
+    each(fields, (fieldName: string) => {
+      const initialValue = get(initialValues, fieldName);
       // set field initial value to saved layer because it means value which was loaded from server.
       schema[fieldName] = { savedValue: initialValue };
     });
   }
-  else if (_.isPlainObject(fields)) {
+  else if (isPlainObject(fields)) {
     _eachField(fields, (field, path) => {
-      const initialValue = _.get(initialValues, path);
+      const initialValue = get(initialValues, path);
       schema[path] = field;
       if (typeof initialValue !== 'undefined') {
         // set field initial value to saved layer because it means value which was loaded from server.
@@ -130,8 +136,8 @@ function _eachField(fields, cb) {
     }
 
     // go deeper
-    _.each(container, (field, name) => {
-      const curPath = _.trimStart(`${path}.${name}`, '.');
+    each(container, (field, name) => {
+      const curPath = trimStart(`${path}.${name}`, '.');
       recursively(field, curPath);
     });
   };
@@ -144,7 +150,7 @@ function _isField(container) {
     if (container.constructor.name === 'Field') return true;
   }
 
-  if (!_.isPlainObject(container)) return false;
+  if (!isPlainObject(container)) return false;
 
   const lookingParams = [
     'name',
@@ -154,7 +160,7 @@ function _isField(container) {
     'savedValue',
   ];
 
-  const interSection = _.intersection(Object.keys(container), lookingParams);
+  const interSection = intersection(Object.keys(container), lookingParams);
 
-  return !_.isEmpty(interSection);
+  return !isEmpty(interSection);
 }
