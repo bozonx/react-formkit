@@ -20,9 +20,8 @@
     "noImplicitReturns": true,
     "noImplicitAny": false,
     "noImplicitThis": true,
-    "noEmitOnError": false,
-
     "noUnusedLocals": false,
+    "noEmitOnError": false,
 
     "declarationDir": "dist/types",
     "baseUrl": "src",

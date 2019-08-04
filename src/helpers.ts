@@ -50,9 +50,13 @@ export function generateFieldsInitParams(fields, initialValues) {
 
 export function generateInitialStateOfField(field): FieldState {
   const onChange = (param: any) => {
-    console.log(1111111, param);
+    console.log(44444, param, param.target, param.target.value);
 
     if (typeof param === 'object' && param.target) {
+      if (!param.target) {
+        throw new Error(`Event doesn't have a target`);
+      }
+
       // params means event
       field.handleChange(param.target.value);
     }
